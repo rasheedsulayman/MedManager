@@ -25,7 +25,6 @@ public class AddMedicationFragment extends  Fragment implements AddMedicationCon
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_add_medication, container, false);
         return view;
     }
@@ -34,12 +33,9 @@ public class AddMedicationFragment extends  Fragment implements AddMedicationCon
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
 
     @Override
-    public void moveToNextStep() {
-
-    }
+    public void moveToNextStep() {}
 }

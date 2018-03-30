@@ -13,8 +13,7 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
     }
 
     @Override
-    public void start() {
-    }
+    public void start() {}
 
     @Override
     public void addMedication(String args) {
