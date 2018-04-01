@@ -22,7 +22,6 @@ public class SetScheduleFragment extends DialogFragment implements SetScheduleCo
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

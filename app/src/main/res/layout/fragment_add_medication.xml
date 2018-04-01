@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
@@ -46,30 +47,69 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginBottom="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
             android:text="Medication Schedule"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-       <TextView
-           android:textSize="16dp"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Starting time"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Starting Date"
+            android:textSize="16dp" />
 
         <TextView
+
+            android:id="@+id/starting_date_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Touch here to set date " />
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Starting time"
+            android:textSize="16dp" />
+
+        <TextView
+            android:text="Touch here to set Time"
             android:id="@+id/starting_time_value"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:text="12 : 30 am" />
 
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Starting Date"
+            android:textSize="16dp" />
+
+        <TextView
+            android:text="Touch here to set date "
+            android:id="@+id/ending_date_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="01/05/2019" />
 
     </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/button"
+         android:text="Next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
 
 
 </LinearLayout>

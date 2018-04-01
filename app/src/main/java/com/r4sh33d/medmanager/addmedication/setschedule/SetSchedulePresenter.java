@@ -16,8 +16,6 @@ public class SetSchedulePresenter implements SetScheduleContract.Presenter {
     public void start() {}
 
     @Override
-    public void addMedication(String args) {
-
-    }
+    public void addMedication(String args) {}
 
 }
