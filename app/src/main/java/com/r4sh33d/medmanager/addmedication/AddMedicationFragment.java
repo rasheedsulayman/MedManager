@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.r4sh33d.medmanager.R;
 
@@ -28,7 +29,6 @@ public class AddMedicationFragment extends  Fragment implements AddMedicationCon
         View view = inflater.inflate(R.layout.fragment_add_medication, container, false);
         return view;
     }
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
