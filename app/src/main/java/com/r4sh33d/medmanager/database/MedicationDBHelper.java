@@ -13,16 +13,17 @@ public class MedicationDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Medications.db";
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + MedicationContract.MedicationEntry.TABLE_NAME + " (" +
-                    MedicationContract.MedicationEntry._ID + " INTEGER PRIMARY KEY," +
-                    MedicationContract.MedicationEntry.COLUMN_MEDICATION_NAME + " TEXT," +
-                    MedicationContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION + " TEXT," +
-                    MedicationContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL + " INTEGER," +
-                    MedicationContract.MedicationEntry.COLUMN_MEDICATION_START_TIME + " INTEGER," +
-                    MedicationContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + " INTEGER)";
+            "CREATE TABLE " + MedicationDBContract.MedicationEntry.TABLE_NAME + " (" +
+                    MedicationDBContract.MedicationEntry._ID + " INTEGER PRIMARY KEY," +
+                    MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME + " TEXT," +
+                    MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION + " TEXT," +
+                    MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY + " TEXT," +
+                    MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL + " INTEGER," +
+                    MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME + " INTEGER," +
+                    MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + MedicationContract.MedicationEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + MedicationDBContract.MedicationEntry.TABLE_NAME;
 
     public MedicationDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
