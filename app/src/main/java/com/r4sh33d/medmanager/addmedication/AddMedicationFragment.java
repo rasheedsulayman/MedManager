@@ -1,24 +1,33 @@
 package com.r4sh33d.medmanager.addmedication;
 
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.r4sh33d.medmanager.Interval;
 import com.r4sh33d.medmanager.R;
+import com.r4sh33d.medmanager.database.MedicationDBHelper;
 import com.r4sh33d.medmanager.datepickers.DatePickerFragment;
+import com.r4sh33d.medmanager.datepickers.TimePickerFragment;
+import com.r4sh33d.medmanager.utility.LocalData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,16 +43,26 @@ import butterknife.OnClick;
  */
 public class AddMedicationFragment extends Fragment implements AddMedicationContract.View {
     private static String TAG = AddMedicationFragment.class.getSimpleName();
+
     @BindView(R.id.medication_name_edit_text)
-    EditText medicationName;
+    EditText medicationNameEditText;
+    @BindView(R.id.medication_description_edit_text)
+    EditText medicationDescriptionEditText;
     @BindView(R.id.medication_quantity_edit_text)
     EditText medicationQuantityEditText;
     @BindView(R.id.starting_date_value)
     TextView startingDateValue;
     @BindView(R.id.ending_date_value)
     TextView endingDateValue;
-
+    @BindView(R.id.medication_interval_hour_edit_text)
+    TextView medicationIntervalEditText;
+    @BindView(R.id.starting_time_value)
+    TextView startingTimeValue;
+    @BindView(R.id.medication_interval_spinner)
+    Spinner medicationIntervalSpinner;
     Calendar startingDateCalender, endingDateCalender;
+    AddMedicationContract.Presenter addMedicationPresenter;
+    String startDate, startTime, endDate;
 
 
     public AddMedicationFragment() {
@@ -62,16 +81,23 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        addMedicationPresenter = new AddMedicationPresenter(this);
         startingDateCalender = Calendar.getInstance();
         endingDateCalender = Calendar.getInstance();
         setCalenderDefault(startingDateCalender);
         setCalenderDefault(endingDateCalender);
+        prepareSpinner();
     }
 
+    void prepareSpinner() {
+        ArrayAdapter<Interval> adapter =
+                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, LocalData.intervalArrayList);
+        medicationIntervalSpinner.setAdapter(adapter);
+    }
 
     public void setCalenderDefault(Calendar calendar) {
         calendar.setTimeInMillis(0);
-        calendar.set(Calendar.HOUR_OF_DAY , 0);//UTC offset
+        calendar.set(Calendar.HOUR_OF_DAY, 0); //UTC offset
     }
 
     @OnClick(R.id.starting_date_value)
@@ -83,7 +109,9 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
 
     @OnClick(R.id.starting_time_value)
     void onClickStartingTimeValue() {
-
+        TimePickerFragment newFragment = TimePickerFragment.newInstance(true);
+        newFragment.setTargetFragment(this, 0);
+        newFragment.show(getFragmentManager(), "timePicker");
     }
 
 
@@ -96,43 +124,92 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
 
 
     @Override
-    public void moveToNextStep() { }
+    public void moveToNextStep() {
+    }
 
 
     @OnClick(R.id.button)
     void onClickSave() {
-        Log.d(TAG , "The difference in time Milliseconds is " +
-                (endingDateCalender.getTimeInMillis() - startingDateCalender.getTimeInMillis()));
+        Interval interval = (Interval) medicationIntervalSpinner.getSelectedItem();
+        if (!validateEditTexts(medicationNameEditText)) {
+            showToast("Please enter medication name ");
+            return;
+        }
+        if (!validateEditTexts(medicationQuantityEditText)) {
+            showToast("Please enter quantity to proceed ");
+            return;
+        }
+        if (TextUtils.isEmpty(startDate)) {
+            showToast("Please enter start date to proceed");
+            return;
+        }
+        if (TextUtils.isEmpty(startTime)) {
+            showToast("Please enter start time to proceed");
+            return;
+        }
+        if (TextUtils.isEmpty(endDate)) {
+            showToast("Please enter end date to proceed");
+            return;
+        }
+
+        addMedicationPresenter.addMedication(medicationNameEditText.getText().toString(),
+                medicationDescriptionEditText.getText().toString(),
+                medicationQuantityEditText.getText().toString(),
+                startingDateCalender.getTimeInMillis(),
+                endingDateCalender.getTimeInMillis(),
+                interval.getTimeInMilliseconds() , new MedicationDBHelper(getContext()));
+
+        @SuppressLint("DefaultLocale")
+        String values = String.format(
+                "Name : %s , %n Description : %s %n Quantity : %s , %n Start time : %d, %n End time : %d, %n Interval : %d , %n ",
+                medicationNameEditText.getText().toString(),
+                medicationDescriptionEditText.getText().toString(),
+                medicationQuantityEditText.getText().toString(),
+                startingDateCalender.getTimeInMillis(),
+                endingDateCalender.getTimeInMillis(),
+                interval.getTimeInMilliseconds());
+        Log.d(TAG, "The values are " + values);
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     public void onDateSet(boolean isStartDate, DatePicker view, int year, int month, int dayOfMonth) {
+        SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
         if (isStartDate) {
-            Log.d(TAG, "Initially " + startingDateCalender.getTimeInMillis() + "");
             startingDateCalender.set(year, month, dayOfMonth);
-            SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
-            startingDateValue.setText(month_date.format(startingDateCalender.getTime()));
-            month_date.applyPattern("dd MMM yyyy hh:mm:ss:SS");
-            Log.d(TAG, month_date.format(startingDateCalender.getTime()));
-            Log.d(TAG, startingDateCalender.getTimeInMillis() + "");
+            startDate = month_date.format(startingDateCalender.getTime());
+            startingDateValue.setText(startDate);
         } else {
-            SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
-            Log.d(TAG , "Before ");
-            month_date.applyPattern("dd MMM yyyy HH:mm:ss:SS");
-            Log.d(TAG, month_date.format(endingDateCalender.getTime()));
+            // End date
             endingDateCalender.set(year, month, dayOfMonth);
-            endingDateValue.setText(month_date.format(endingDateCalender.getTime()));
-            month_date.applyPattern("dd MMM yyyy HH:mm:ss:SS");
-            Log.d(TAG, month_date.format(endingDateCalender.getTime()));
-            Log.d(TAG, endingDateCalender.getTimeInMillis() + "");
-            endingDateCalender.add(Calendar.HOUR_OF_DAY , 24);
-            Log.d(TAG , "After Addition");
-            month_date.applyPattern("dd MMM yyyy HH:mm:ss:SS");
-            Log.d(TAG, month_date.format(endingDateCalender.getTime()));
-            Log.d(TAG, endingDateCalender.getTimeInMillis() + "");
+            //this calender instance from 00:00 am this 'day of the month',
+            // we want our alarms to still be valid till the end of that day ,
+            //so shiftby 24 hours
+            endingDateCalender.set(Calendar.HOUR_OF_DAY , 24);
+            endDate = month_date.format(endingDateCalender.getTime());
+            endingDateValue.setText(endDate);
         }
     }
 
-    public void onTimeSet(boolean isStartTime, TimePicker view, int year, int month) {
+    public void onTimeSet(boolean isStartTime, TimePicker view, int hourOfDay, int minutes) {
+        if (isStartTime) {
+            startingDateCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            startingDateCalender.set(Calendar.MINUTE, minutes);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+            startTime = dateFormat.format(startingDateCalender.getTime());
+            startingTimeValue.setText(startTime);
+        }
+    }
 
+    public static boolean validateEditTexts(EditText... editTexts) {
+        for (EditText newEdittext : editTexts) {
+            if (newEdittext.getText().toString().trim().length() < 1) {
+                newEdittext.setError("This Field is required");
+                return false;
+            }
+        }
+        return true;
     }
 }

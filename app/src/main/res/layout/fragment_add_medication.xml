@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
-    android:orientation="vertical">
+    android:layout_margin="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medication Name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <EditText
+
+            android:id="@+id/medication_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,15 +41,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medication Name"
+            android:text="Medication Description"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <EditText
-            android:id="@+id/medication_name_edit_text"
+            android:id="@+id/medication_description_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -42,6 +70,66 @@
             android:id="@+id/medication_quantity_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interval"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <Spinner
+            android:id="@+id/medication_interval_spinner"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:saveEnabled="true"
+            android:spinnerMode="dropdown" />
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:gravity="center"
+                android:hint="hh"
+                android:inputType="number"
+                android:id="@+id/medication_interval_hour_edit_text"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginRight="2dp"
+                android:text=":"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:gravity="center"
+                android:hint="mm"
+                android:inputType="number"
+                android:id="@+id/medication_interval_min_edit_text"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content" />
+
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 
@@ -65,7 +153,6 @@
             android:textSize="16dp" />
 
         <TextView
-
             android:id="@+id/starting_date_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +176,7 @@
             android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Starting Date"
+            android:text="Ending Date"
             android:textSize="16dp" />
 
         <TextView
@@ -102,14 +189,13 @@
     </LinearLayout>
 
 
-
     <Button
         android:id="@+id/button"
          android:text="Next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    </LinearLayout>
 
 
-
-</LinearLayout>
+</ScrollView>

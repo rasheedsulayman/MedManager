@@ -17,6 +17,5 @@ public class MedicationContract {
         public static final String COLUMN_MEDICATION_INTERVAL = "medication_interval";
         public static final String COLUMN_MEDICATION_START_TIME = "medication_start_time";
         public static final String COLUMN_MEDICATION_END_TIME = "medication_end_time"; // no milliseconds till midnight of the last day specified.
-
     }
 }
