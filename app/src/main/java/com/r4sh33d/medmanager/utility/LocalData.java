@@ -1,7 +1,7 @@
 package com.r4sh33d.medmanager.utility;
 
 
-import com.r4sh33d.medmanager.Interval;
+import com.r4sh33d.medmanager.models.Interval;
 
 import java.util.ArrayList;
 

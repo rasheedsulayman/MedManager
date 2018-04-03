@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.models;
 
 public class Interval {
     private String title;

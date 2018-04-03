@@ -2,7 +2,10 @@ package com.r4sh33d.medmanager.addmedication;
 
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,11 +24,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.r4sh33d.medmanager.Interval;
+import com.r4sh33d.medmanager.MedJobBroadcastReceiver;
+import com.r4sh33d.medmanager.models.Interval;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
 import com.r4sh33d.medmanager.datepickers.DatePickerFragment;
 import com.r4sh33d.medmanager.datepickers.TimePickerFragment;
+import com.r4sh33d.medmanager.models.Medication;
+import com.r4sh33d.medmanager.utility.Constants;
 import com.r4sh33d.medmanager.utility.LocalData;
 
 import java.text.SimpleDateFormat;
@@ -124,6 +129,17 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
 
 
     @Override
+    public void onMedicationInsertedToDb(Medication medication) {
+        AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), MedJobBroadcastReceiver.class);
+        intent.putExtra(Constants.KEY_MEDICATION_BUNDLE , medication);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(),
+                (int) medication.dbRowId, //Realistically, our db will never reach Integer.MAX_VALUE
+                intent, 0);
+        addMedicationPresenter.scheduleNotificationJob(alarmMgr , medication , alarmIntent);
+    }
+
+    @Override
     public void moveToNextStep() {
     }
 
@@ -152,12 +168,13 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
             return;
         }
 
-        addMedicationPresenter.addMedication(medicationNameEditText.getText().toString(),
+        Medication medication = new Medication(medicationNameEditText.getText().toString(),
                 medicationDescriptionEditText.getText().toString(),
                 medicationQuantityEditText.getText().toString(),
                 startingDateCalender.getTimeInMillis(),
                 endingDateCalender.getTimeInMillis(),
-                interval.getTimeInMilliseconds() , new MedicationDBHelper(getContext()));
+                interval.getTimeInMilliseconds());
+        addMedicationPresenter.addMedicationToDb(medication, new MedicationDBHelper(getContext()));
 
         @SuppressLint("DefaultLocale")
         String values = String.format(
@@ -187,7 +204,7 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
             //this calender instance from 00:00 am this 'day of the month',
             // we want our alarms to still be valid till the end of that day ,
             //so shiftby 24 hours
-            endingDateCalender.set(Calendar.HOUR_OF_DAY , 24);
+            endingDateCalender.set(Calendar.HOUR_OF_DAY, 24);
             endDate = month_date.format(endingDateCalender.getTime());
             endingDateValue.setText(endDate);
         }

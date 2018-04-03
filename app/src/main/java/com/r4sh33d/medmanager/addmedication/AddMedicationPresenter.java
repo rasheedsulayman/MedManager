@@ -1,10 +1,14 @@
 package com.r4sh33d.medmanager.addmedication;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.r4sh33d.medmanager.database.MedicationDBContract;
+import com.r4sh33d.medmanager.models.Medication;
+import com.r4sh33d.medmanager.utility.Utils;
 
 /**
  * Created by rasheed on 3/1/18.
@@ -21,27 +25,29 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
     @Override
     public void start() {}
 
+
     @Override
-    public void addMedication(String medicationName, String medicationDescription, String medicationQuantity,
-                              long startTime, long endTime, long interval, SQLiteOpenHelper sqLiteOpenHelper) {
+    public void addMedicationToDb(Medication medication , SQLiteOpenHelper sqLiteOpenHelper) {
         // Gets the data repository in write mode
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME, medicationName);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION, medicationDescription);
-        values.put(MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY , medicationQuantity);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME, startTime);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME , endTime);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL , interval);
-
-        long newRowId = db.insert(MedicationDBContract.MedicationEntry.TABLE_NAME, null, values);
-
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME, medication.name);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION, medication.description);
+        values.put(MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY , medication.quantity);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME, medication.startTime);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME , medication.endTime);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL , medication.interval);
+        medication.dbRowId = db.insert(MedicationDBContract.MedicationEntry.TABLE_NAME, null, values);
+        view.onMedicationInsertedToDb(medication);
     }
 
-
-    void scheduleNotificationJob(){
-        //TODO come and implement this
+    @Override
+    public void scheduleNotificationJob(AlarmManager alarmManager, Medication medication, PendingIntent alarmIntent) {
+        if (Utils.isKitKatAndAbove()) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, medication.startTime, alarmIntent);
+        }else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, medication.startTime, alarmIntent);
+        }
     }
-
 }
