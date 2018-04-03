@@ -7,5 +7,4 @@ public class Utils {
     public static boolean isKitKatAndAbove(){
       return  Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
-
 }

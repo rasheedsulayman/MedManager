@@ -17,7 +17,6 @@ import com.r4sh33d.medmanager.utility.Utils;
 public class AddMedicationPresenter implements AddMedicationContract.Presenter {
     private AddMedicationContract.View view;
 
-
     AddMedicationPresenter(AddMedicationContract.View view) {
         this.view = view;
     }
@@ -30,7 +29,6 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
     public void addMedicationToDb(Medication medication , SQLiteOpenHelper sqLiteOpenHelper) {
         // Gets the data repository in write mode
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME, medication.name);
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION, medication.description);

@@ -130,9 +130,10 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
 
     @Override
     public void onMedicationInsertedToDb(Medication medication) {
+        Log.d(TAG , "OnMedication inserted " + medication);
         AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), MedJobBroadcastReceiver.class);
-        intent.putExtra(Constants.KEY_MEDICATION_BUNDLE , medication);
+        intent.putExtra(Constants.KEY_MEDICATIO_DB_ROW_ID , medication.dbRowId);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(),
                 (int) medication.dbRowId, //Realistically, our db will never reach Integer.MAX_VALUE
                 intent, 0);
@@ -174,18 +175,8 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
                 startingDateCalender.getTimeInMillis(),
                 endingDateCalender.getTimeInMillis(),
                 interval.getTimeInMilliseconds());
+        Log.d(TAG, "The values are " + medication);
         addMedicationPresenter.addMedicationToDb(medication, new MedicationDBHelper(getContext()));
-
-        @SuppressLint("DefaultLocale")
-        String values = String.format(
-                "Name : %s , %n Description : %s %n Quantity : %s , %n Start time : %d, %n End time : %d, %n Interval : %d , %n ",
-                medicationNameEditText.getText().toString(),
-                medicationDescriptionEditText.getText().toString(),
-                medicationQuantityEditText.getText().toString(),
-                startingDateCalender.getTimeInMillis(),
-                endingDateCalender.getTimeInMillis(),
-                interval.getTimeInMilliseconds());
-        Log.d(TAG, "The values are " + values);
     }
 
     public void showToast(String message) {
@@ -201,9 +192,9 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
         } else {
             // End date
             endingDateCalender.set(year, month, dayOfMonth);
-            //this calender instance from 00:00 am this 'day of the month',
+            //this calender instance is from 00:00 am this 'day of the month',
             // we want our alarms to still be valid till the end of that day ,
-            //so shiftby 24 hours
+            //so shift by 24 hours
             endingDateCalender.set(Calendar.HOUR_OF_DAY, 24);
             endDate = month_date.format(endingDateCalender.getTime());
             endingDateValue.setText(endDate);

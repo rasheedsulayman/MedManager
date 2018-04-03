@@ -10,7 +10,7 @@ public class Interval {
     }
 
     private long convertHoursToMilliseconds(double hours){
-        return (long) hours*60*60*1000;
+        return (long)(hours*60*60*1000);
     }
 
     public long getTimeInMilliseconds() {
