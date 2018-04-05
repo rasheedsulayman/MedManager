@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.r4sh33d.medmanager.database.MedicationDBHelper;
 import com.r4sh33d.medmanager.database.MedicationDao;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;
@@ -31,21 +33,20 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
          Log.d(TAG , "Broadcast reciever onRecieved called");
         long medicationRowId  = intent.getLongExtra(Constants.KEY_MEDICATIO_DB_ROW_ID, -1);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
+        SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
+
         if (medicationRowId != -1){
-            Medication medication = MedicationDao.getMedicationInfoFromDb(String.valueOf(medicationRowId) , context);
+            Medication medication = MedicationDao.getMedicationInfoWithId(medicationRowId , db);
             //send Notification here
             Log.d(TAG , "Medication gotten from the DB " + medication);
             sendNotification(medication , context);
-            if ((System.currentTimeMillis() + medication.interval) < medication.endTime){
+            long newRingTime = System.currentTimeMillis() + medication.interval;
+            if ( newRingTime < medication.endTime){
                 //if we are still in bound, schedule another alarm
-                PendingIntent alarmIntent = PendingIntent.getBroadcast(context,
-                        (int) medication.dbRowId, //Realistically, our db will never reach Integer.MAX_VALUE
-                        intent, 0);
-                if (Utils.isKitKatAndAbove()) {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + medication.interval, alarmIntent);
-                }else {
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ medication.interval, alarmIntent);
-                }
+                Utils.scheduleAlarm(medication , context , intent , newRingTime);
+                MedicationDao.updateNextRingTime(medicationRowId , newRingTime, db);
             }
         }
     }

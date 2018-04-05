@@ -11,6 +11,7 @@ public class Medication  implements Parcelable {
      public long endTime;
      public  long interval;
      public  long dbRowId;
+     public long nextRingTime;
 
 
     public Medication(String name, String description, String quantity, long startTime, long endTime, long interval) {
@@ -24,13 +25,14 @@ public class Medication  implements Parcelable {
 
     public Medication(String name, String description, String quantity, long startTime,
                       long endTime, long interval, long dbRowId) {
-        this.name = name;
-        this.description = description;
-        this.quantity = quantity;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.interval = interval;
+        this(name, description, quantity, startTime, endTime, interval);
         this.dbRowId = dbRowId;
+    }
+
+    public Medication(String name, String description, String quantity, long startTime, long endTime,
+                      long interval, long dbRowId, long nextRingTime) {
+        this(name, description, quantity, startTime, endTime, interval, dbRowId);
+        this.nextRingTime = nextRingTime;
     }
 
     protected Medication(Parcel in) {

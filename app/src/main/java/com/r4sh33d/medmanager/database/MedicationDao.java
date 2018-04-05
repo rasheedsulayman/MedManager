@@ -1,5 +1,6 @@
 package com.r4sh33d.medmanager.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,33 +8,62 @@ import android.provider.BaseColumns;
 
 import com.r4sh33d.medmanager.models.Medication;
 
+import java.util.ArrayList;
+
 public class MedicationDao {
 
-    public static Medication getMedicationInfoFromDb(String id, Context context) {
-        MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
-        SQLiteDatabase db = medicationDBHelper.getReadableDatabase();
-        String[] projection = {
-                BaseColumns._ID,
-                MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME,
-                MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION,
-                MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY,
-                MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME,
-                MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL,
-                MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME,
-        };
-        String selection = MedicationDBContract.MedicationEntry._ID + " = ?";
-        String[] selectionArgs = {String.valueOf(id)};
+    public static String[] projection = {
+            BaseColumns._ID,
+            MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME,
+            MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION,
+            MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY,
+            MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME,
+            MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL,
+            MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME,
+            MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME
+    };
+
+    public static Medication getMedicationInfoWithId(long rowId, SQLiteDatabase db) {
+        String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
+        return getMedicationsListFromCursor(getMedicationCursor(selection, db)).get(0);
+    }
+
+    public static ArrayList<Medication> getActiveMedications(SQLiteDatabase db) {
+        String selection = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + ">" + System.currentTimeMillis();
+        return getMedicationsListFromCursor(getMedicationCursor(selection , db));
+    }
+
+    public static  int  updateNextRingTime(long rowId , long newRIngTime , SQLiteDatabase db){
+        ContentValues values = new ContentValues();
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME, newRIngTime);
+        String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
+        String[] selectionArgs = { "MyOldTitle" };
+        return db.update(
+                MedicationDBContract.MedicationEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+    }
+
+
+    public static Cursor getMedicationCursor(String selection, SQLiteDatabase db) {
+
         Cursor cursor = db.query(
                 MedicationDBContract.MedicationEntry.TABLE_NAME,   // The table to query
                 projection,             // The array of columns to return (pass null to get all)
                 selection,              // The columns for the WHERE clause
-                selectionArgs,          // The values for the WHERE clause
+                null,          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups
                 null               // The sort order
         );
-        Medication medication = null;
-        if (cursor != null && cursor.moveToFirst()) {
+        db.close();
+        return cursor;
+    }
+
+    public static ArrayList<Medication> getMedicationsListFromCursor(Cursor cursor) {
+        ArrayList<Medication> medicationArrayList = new ArrayList<>();
+        if (cursor != null) {
             int idColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry._ID);
             int nameColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME);
             int descriptionColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION);
@@ -41,21 +71,22 @@ public class MedicationDao {
             int startTimeColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME);
             int endTimeColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME);
             int intervalColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL);
-            medication = new Medication(
-                    cursor.getString(nameColumn),
-                    cursor.getString(descriptionColumn),
-                    cursor.getString(quantityColumn),
-                    cursor.getLong(startTimeColumn),
-                    cursor.getLong(endTimeColumn),
-                    cursor.getLong(intervalColumn),
-                    cursor.getLong(idColumn)
-            );
+            int nextRingColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME);
+            while (cursor.moveToNext()) {
+                medicationArrayList.add(new Medication(
+                        cursor.getString(nameColumn),
+                        cursor.getString(descriptionColumn),
+                        cursor.getString(quantityColumn),
+                        cursor.getLong(startTimeColumn),
+                        cursor.getLong(endTimeColumn),
+                        cursor.getLong(intervalColumn),
+                        cursor.getLong(idColumn),
+                        cursor.getLong(nextRingColumn)
+                ));
+            }
             cursor.close();
         }
-        db.close();
-        return medication;
-
+        return medicationArrayList;
     }
-
 
 }
