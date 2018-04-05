@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "566341313637-7i7lq4qsq07kf6336udg0re74rulpud9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.r4sh33d.medmanager",
+            "certificate_hash": "a8e80dcdad327568e54a837f09fcbb8bc1450ce9"
+          }
+        },
+        {
           "client_id": "566341313637-evgsjuebirrrngn0jevknuv890dnnqt6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -126,8 +126,7 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
         newFragment.setTargetFragment(this, 0);
         newFragment.show(getFragmentManager(), "datePicker");
     }
-
-
+    
     @Override
     public void onMedicationInsertedToDb(Medication medication) {
         Log.d(TAG , "OnMedication inserted " + medication);
@@ -141,9 +140,7 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
     }
 
     @Override
-    public void moveToNextStep() {
-    }
-
+    public void moveToNextStep() { }
 
     @OnClick(R.id.button)
     void onClickSave() {
