@@ -27,6 +27,7 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.r4sh33d.medmanager.activeMedications.ActiveMedicationsFragment;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
 
 import java.util.Arrays;
@@ -44,7 +45,7 @@ public class DrawerActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-        navigateToFragment(new AddMedicationFragment());
+        navigateToFragment(new ActiveMedicationsFragment());
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -63,9 +64,9 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
-    void setNavigationViewHeaderDetails(FirebaseUser user){
+    void setNavigationViewHeaderDetails(FirebaseUser user) {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerView =  navigationView.getHeaderView(0);
+        View headerView = navigationView.getHeaderView(0);
         ImageView userProfilePic = headerView.findViewById(R.id.user_profile_pic);
         TextView userDisplayName = headerView.findViewById(R.id.user_display_name);
         TextView userEmail = headerView.findViewById(R.id.user_email);
@@ -111,13 +112,17 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_med_list) {
-           navigateToFragment(new AddMedicationFragment());
-        } else if (id == R.id.nav_share) {
-
+        switch (item.getItemId()) {
+            case R.id.nav_active_med_list:
+                navigateToFragment(new ActiveMedicationsFragment());
+                break;
+            case R.id.nav_add_new_med:
+                navigateToFragment(new AddMedicationFragment());
+                break;
+            case R.id.nav_medications_by_month:
+                break;
         }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,27 +55,27 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        activeMedicationsListAdapter = new ActiveMedicationsListAdapter(new ArrayList<Medication>());
+        medsListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        medsListRecyclerView.setAdapter(activeMedicationsListAdapter);
     }
 
 
+    @NonNull
     @Override
     public Loader<ArrayList<Medication>> onCreateLoader(int id, Bundle args) {
         return new MedicationsListLoader(getContext() , MedicationDao.ACTIVE_MEDICATION_SELECTION , null);
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<Medication>> loader, ArrayList<Medication> data) {
+    public void onLoadFinished(@NonNull Loader<ArrayList<Medication>> loader, ArrayList<Medication> data) {
         activeMedicationsListAdapter.updateData(data);
     }
 
-
     @Override
-    public void onLoaderReset(Loader<ArrayList<Medication>> loader) {
-
-    }
-
+    public void onLoaderReset(@NonNull Loader<ArrayList<Medication>> loader) {}
 
     @Override
     public void moveToNextStep() {}
