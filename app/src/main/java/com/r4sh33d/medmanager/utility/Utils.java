@@ -8,6 +8,8 @@ import android.os.Build;
 
 import com.r4sh33d.medmanager.models.Medication;
 
+import java.util.Calendar;
+
 public class Utils {
 
     public static boolean isKitKatAndAbove(){
@@ -24,5 +26,10 @@ public class Utils {
         }else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, alarmIntent);
         }
+    }
+
+    public static void setCalenderDefault(Calendar calendar) {
+        calendar.setTimeInMillis(0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0); //UTC offset
     }
 }

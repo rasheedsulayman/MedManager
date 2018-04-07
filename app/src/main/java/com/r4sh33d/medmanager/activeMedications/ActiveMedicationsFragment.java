@@ -14,13 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.r4sh33d.medmanager.MedicationsListAdapter;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationDao;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
 import com.r4sh33d.medmanager.models.Medication;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +34,7 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
 
     @BindView(R.id.recyclerview)
     RecyclerView medsListRecyclerView;
-    ActiveMedicationsListAdapter activeMedicationsListAdapter;
+    MedicationsListAdapter activeMedicationsListAdapter;
 
     public ActiveMedicationsFragment() {
         // Required empty public constructor
@@ -57,7 +57,7 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activeMedicationsListAdapter = new ActiveMedicationsListAdapter(new ArrayList<Medication>());
+        activeMedicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>());
         medsListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         medsListRecyclerView.setAdapter(activeMedicationsListAdapter);
     }

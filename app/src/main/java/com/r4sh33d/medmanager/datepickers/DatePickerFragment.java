@@ -13,10 +13,12 @@ import java.util.Calendar;
 
 public class DatePickerFragment  extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     private static  String IS_START_DATE_ARGS = "is_start_date";
+    private static  String DISABLE_PAST_DATE_ARG = "disable_end_date_args";
 
-    public static DatePickerFragment newInstance(boolean isStartDate) {
+    public static DatePickerFragment newInstance(boolean isStartDate , boolean disablePastDate) {
         Bundle args = new Bundle();
         args.putBoolean(IS_START_DATE_ARGS , isStartDate);
+        args.putBoolean(DISABLE_PAST_DATE_ARG , disablePastDate);
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -33,7 +35,9 @@ public class DatePickerFragment  extends DialogFragment implements DatePickerDia
         int day = c.get(Calendar.DAY_OF_MONTH);
         // Create a new instance of DatePickerDialog and return it
         DatePickerDialog datePickerDialog =  new DatePickerDialog(getActivity(), this, year, month, day);
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        if (getArguments().getBoolean(DISABLE_PAST_DATE_ARG , false)){
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        }
         return datePickerDialog;
     }
 

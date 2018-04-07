@@ -1,7 +1,6 @@
 package com.r4sh33d.medmanager.addmedication;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -33,6 +32,7 @@ import com.r4sh33d.medmanager.datepickers.TimePickerFragment;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;
 import com.r4sh33d.medmanager.utility.LocalData;
+import com.r4sh33d.medmanager.utility.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -89,8 +89,8 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
         addMedicationPresenter = new AddMedicationPresenter(this);
         startingDateCalender = Calendar.getInstance();
         endingDateCalender = Calendar.getInstance();
-        setCalenderDefault(startingDateCalender);
-        setCalenderDefault(endingDateCalender);
+        Utils.setCalenderDefault(startingDateCalender);
+        Utils.setCalenderDefault(endingDateCalender);
         prepareSpinner();
     }
 
@@ -100,14 +100,9 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
         medicationIntervalSpinner.setAdapter(adapter);
     }
 
-    public void setCalenderDefault(Calendar calendar) {
-        calendar.setTimeInMillis(0);
-        calendar.set(Calendar.HOUR_OF_DAY, 0); //UTC offset
-    }
-
     @OnClick(R.id.starting_date_value)
     void onClickStartingDate() {
-        DialogFragment newFragment = DatePickerFragment.newInstance(true);
+        DialogFragment newFragment = DatePickerFragment.newInstance(true , true);
         newFragment.setTargetFragment(this, 0);
         newFragment.show(getFragmentManager(), "datePicker");
     }
@@ -122,7 +117,7 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
 
     @OnClick(R.id.ending_date_value)
     void onClickEndingDateValue() {
-        DialogFragment newFragment = DatePickerFragment.newInstance(false);
+        DialogFragment newFragment = DatePickerFragment.newInstance(false , true);
         newFragment.setTargetFragment(this, 0);
         newFragment.show(getFragmentManager(), "datePicker");
     }

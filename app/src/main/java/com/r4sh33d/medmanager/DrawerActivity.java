@@ -65,7 +65,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     void setNavigationViewHeaderDetails(FirebaseUser user) {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         ImageView userProfilePic = headerView.findViewById(R.id.user_profile_pic);
         TextView userDisplayName = headerView.findViewById(R.id.user_display_name);

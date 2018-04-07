@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager.activeMedications;
+package com.r4sh33d.medmanager;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,15 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.models.Medication;
 
 import java.util.ArrayList;
 
-public class ActiveMedicationsListAdapter extends RecyclerView.Adapter<ActiveMedicationsListAdapter.MedViewHolder> {
+public class MedicationsListAdapter extends RecyclerView.Adapter<MedicationsListAdapter.MedViewHolder> {
     private ArrayList<Medication> medicationArrayList;
 
-    public ActiveMedicationsListAdapter(ArrayList<Medication> medicationArrayList) {
+    public MedicationsListAdapter(ArrayList<Medication> medicationArrayList) {
         this.medicationArrayList = medicationArrayList;
     }
 
@@ -34,7 +33,7 @@ public class ActiveMedicationsListAdapter extends RecyclerView.Adapter<ActiveMed
 
     @Override
     public int getItemCount() {
-        return 0;
+        return medicationArrayList.size();
     }
 
     public void updateData(ArrayList<Medication> data) {
