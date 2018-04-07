@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
 import com.r4sh33d.medmanager.database.MedicationDao;
+import com.r4sh33d.medmanager.database.MedicationsListLoader;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;
 import com.r4sh33d.medmanager.utility.Utils;
@@ -19,7 +20,7 @@ public class MedBootReceiver extends BroadcastReceiver{
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
             SQLiteDatabase db = medicationDBHelper.getReadableDatabase();
-            ArrayList<Medication> activeMedications = MedicationDao.getActiveMedications(db);
+            ArrayList<Medication> activeMedications = MedicationDao.getMedicationsList(db, MedicationDao.ACTIVE_MEDICATION_SELECTION);
             for (Medication medication : activeMedications){
                 long scheduleTime  = medication.nextRingTime;
                 long currentTime = System.currentTimeMillis();
@@ -31,8 +32,8 @@ public class MedBootReceiver extends BroadcastReceiver{
                     intent.putExtra(Constants.KEY_MEDICATIO_DB_ROW_ID , medication.dbRowId);
                     Utils.scheduleAlarm(medication , context  , alarmIntent , scheduleTime);
                 }
-
             }
+            db.close();
         }
 
     }

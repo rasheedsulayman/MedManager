@@ -37,7 +37,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
         SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
 
-        if (medicationRowId != -1){
+        if (medicationRowId != -1) {
             Medication medication = MedicationDao.getMedicationInfoWithId(medicationRowId , db);
             //send Notification here
             Log.d(TAG , "Medication gotten from the DB " + medication);

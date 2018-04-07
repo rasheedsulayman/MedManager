@@ -22,15 +22,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     void testComments(){
        /*
        *  boolean after(Date date)
-       *
-       *
-       *
-       *
        *
        *
        *

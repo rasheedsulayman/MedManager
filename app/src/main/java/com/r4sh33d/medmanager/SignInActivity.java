@@ -1,8 +1,8 @@
 package com.r4sh33d.medmanager;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.firebase.ui.auth.AuthUI;
@@ -10,7 +10,6 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 public class SignInActivity extends AppCompatActivity {
@@ -21,7 +20,6 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
@@ -33,6 +31,7 @@ public class SignInActivity extends AppCompatActivity {
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
+                            .setIsSmartLockEnabled(false)
                             .setAvailableProviders(Collections.singletonList(
                                     new AuthUI.IdpConfig.GoogleBuilder().build()))
                             .build(),
@@ -56,18 +55,20 @@ public class SignInActivity extends AppCompatActivity {
                 if (response == null) {
                     // User pressed back button
                     Log.d(TAG , "User pressed back button");
-                    showSnackbar(R.string.sign_in_cancelled);
+                    //showSnackbar(R.string.sign_in_cancelled);
                     return;
                 }
                 if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
                     Log.d(TAG , "No network");
-                    showSnackbar(R.string.no_internet_connection);
+                    //showSnackbar(R.string.no_internet_connection);
                     return;
                 }
-                showSnackbar(R.string.unknown_error);
+                //showSnackbar(R.string.unknown_error);
                 Log.e(TAG, "Sign-in error: ", response.getError());
             }
         }
     }
+
+
 
 }

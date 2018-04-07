@@ -23,13 +23,14 @@ public class MedicationDao {
             MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME
     };
 
+    public static String ACTIVE_MEDICATION_SELECTION = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + ">" + System.currentTimeMillis();
+
     public static Medication getMedicationInfoWithId(long rowId, SQLiteDatabase db) {
         String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
         return getMedicationsListFromCursor(getMedicationCursor(selection, db)).get(0);
     }
 
-    public static ArrayList<Medication> getActiveMedications(SQLiteDatabase db) {
-        String selection = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + ">" + System.currentTimeMillis();
+    public static ArrayList<Medication> getMedicationsList (SQLiteDatabase db , String selection) {
         return getMedicationsListFromCursor(getMedicationCursor(selection , db));
     }
 
