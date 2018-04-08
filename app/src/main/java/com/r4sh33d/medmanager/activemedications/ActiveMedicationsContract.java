@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager.activeMedications;
+package com.r4sh33d.medmanager.activemedications;
 
 public interface ActiveMedicationsContract {
 

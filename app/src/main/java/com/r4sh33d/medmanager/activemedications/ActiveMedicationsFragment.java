@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager.activeMedications;
+package com.r4sh33d.medmanager.activemedications;
 
 
 import android.os.Bundle;
@@ -49,7 +49,7 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_set_schedule, container, false);
+        View view = inflater.inflate(R.layout.fragment_active_medications, container, false);
         ButterKnife.bind(this , view);
         return view;
     }
@@ -61,7 +61,6 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
         medsListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         medsListRecyclerView.setAdapter(activeMedicationsListAdapter);
     }
-
 
     @NonNull
     @Override

@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.r4sh33d.medmanager.database.MedicationDao;
+import com.r4sh33d.medmanager.database.MedicationDBContract;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
 import com.r4sh33d.medmanager.datepickers.DatePickerFragment;
 import com.r4sh33d.medmanager.models.Medication;
@@ -36,7 +36,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MonthlyMedicationsFragment extends Fragment implements  LoaderManager.LoaderCallbacks<ArrayList<Medication>> {
+public class MonthlyMedicationsFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Medication>> {
     @BindView(R.id.fab)
     FloatingActionButton changeMonthFab;
 
@@ -46,6 +46,8 @@ public class MonthlyMedicationsFragment extends Fragment implements  LoaderManag
     @BindView(R.id.month_label)
     TextView monthLabel;
     MedicationsListAdapter medicationsListAdapter;
+    private String MONTHLY_INTERVAL_SELECTION = "";
+    Calendar calendar;
 
     public MonthlyMedicationsFragment() {
         // Required empty public constructor
@@ -57,7 +59,6 @@ public class MonthlyMedicationsFragment extends Fragment implements  LoaderManag
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_monthly_medications, container, false);
         ButterKnife.bind(this, view);
-
         return view;
     }
 
@@ -67,15 +68,27 @@ public class MonthlyMedicationsFragment extends Fragment implements  LoaderManag
         medicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>());
         monthlyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         monthlyRecyclerView.setAdapter(medicationsListAdapter);
-        Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         Utils.setCalenderDefault(calendar);
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Calendar thisMonthCalender = Calendar.getInstance();
+        calendar.set(Calendar.YEAR , thisMonthCalender.get(Calendar.YEAR));
+        calendar.set(Calendar.MONTH , thisMonthCalender.get(Calendar.MONTH));
+        monthLabel.setText(getFormattedDateFormantLabel(calendar));
+        MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
+        getLoaderManager().initLoader(0, null, this);
     }
 
 
     @NonNull
     @Override
     public Loader<ArrayList<Medication>> onCreateLoader(int id, Bundle args) {
-        return new MedicationsListLoader(getContext() , MedicationDao.ACTIVE_MEDICATION_SELECTION , null);
+        return new MedicationsListLoader(getContext(), MONTHLY_INTERVAL_SELECTION , null);
     }
 
     @Override
@@ -84,17 +97,28 @@ public class MonthlyMedicationsFragment extends Fragment implements  LoaderManag
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<ArrayList<Medication>> loader) {}
+    public void onLoaderReset(@NonNull Loader<ArrayList<Medication>> loader) {
+    }
 
+    public void onDateSet (boolean isStartDate, DatePicker view, int year, int month, int dayOfMonth) {
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH , month);
+        monthLabel.setText(getFormattedDateFormantLabel(calendar));
+        MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
+        getLoaderManager().restartLoader(0, null, this);
+    }
 
-
-    public void onDateSet(boolean isStartDate, DatePicker view, int year, int month, int dayOfMonth) {
+    String getFormattedDateFormantLabel(Calendar calendar){
         SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+        return  month_date.format(calendar.getTime());
+    }
 
-        calendar.set(year, month, dayOfMonth);
-        monthLabel.setText(month_date.format(calendar.getTime()));
-
-
+    String getMonthIntervalSelection (Calendar calendar) {
+        long startInterval = calendar.getTimeInMillis();
+        calendar.add(Calendar.MONTH, 1);
+        long endInterval = calendar.getTimeInMillis();
+        return  startInterval + " >= " + MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME
+                + "AND " + endInterval + " <= " + MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME;
     }
 
 

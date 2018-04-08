@@ -58,7 +58,7 @@ public class MedicationDao {
                 null,                   // don't filter by row groups
                 null               // The sort order
         );
-        db.close();
+
         return cursor;
     }
 

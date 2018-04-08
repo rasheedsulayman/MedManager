@@ -10,6 +10,8 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class SignInActivity extends AppCompatActivity {
@@ -32,7 +34,9 @@ public class SignInActivity extends AppCompatActivity {
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setIsSmartLockEnabled(false)
-                            .setAvailableProviders(Collections.singletonList(
+                            .setLogo(R.mipmap.ic_launcher_round)
+                            .setAvailableProviders(Arrays.asList(
+                                    new AuthUI.IdpConfig.EmailBuilder().build(),
                                     new AuthUI.IdpConfig.GoogleBuilder().build()))
                             .build(),
                     RC_SIGN_IN);

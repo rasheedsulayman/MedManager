@@ -1,14 +1,10 @@
 package com.r4sh33d.medmanager;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,17 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ErrorCodes;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.r4sh33d.medmanager.activeMedications.ActiveMedicationsFragment;
+import com.r4sh33d.medmanager.activemedications.ActiveMedicationsFragment;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,6 +42,7 @@ public class DrawerActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(0);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
@@ -120,6 +110,7 @@ public class DrawerActivity extends AppCompatActivity
                 navigateToFragment(new AddMedicationFragment());
                 break;
             case R.id.nav_medications_by_month:
+                navigateToFragment(new MonthlyMedicationsFragment());
                 break;
         }
 
@@ -130,7 +121,7 @@ public class DrawerActivity extends AppCompatActivity
 
     void navigateToFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
+        transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
     }
 
