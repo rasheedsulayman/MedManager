@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.monthlymedications;
 
 
 import android.app.DatePickerDialog;
@@ -17,9 +17,12 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationDBContract;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
+import com.r4sh33d.medmanager.datepickers.MonthOnlyPickerDialog;
 import com.r4sh33d.medmanager.models.Medication;
+import com.r4sh33d.medmanager.recycleradapters.MedicationsListAdapter;
 import com.r4sh33d.medmanager.utility.Utils;
 
 import java.text.SimpleDateFormat;
@@ -64,7 +67,7 @@ public class MonthlyMedicationsFragment extends Fragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        medicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>());
+        medicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>() , false);
         monthlyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         monthlyRecyclerView.setAdapter(medicationsListAdapter);
         calendar = Calendar.getInstance();

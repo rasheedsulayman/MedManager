@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.recycleradapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.r4sh33d.medmanager.R;
+import com.r4sh33d.medmanager.activities.MainActivity;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;

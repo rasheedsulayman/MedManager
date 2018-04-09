@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.r4sh33d.medmanager.monthlymedications.MonthlyMedicationsFragment;
+import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.activemedications.ActiveMedicationsFragment;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
 import com.r4sh33d.medmanager.models.Medication;
@@ -28,6 +30,7 @@ import com.r4sh33d.medmanager.utility.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -95,6 +98,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @OnClick(R.id.fab)
+    void onClickFab(){
+        navigateToFragment(AddMedicationFragment.newInstance(null) , true);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -128,7 +136,6 @@ public class MainActivity extends AppCompatActivity
                 navigateToFragment(new MonthlyMedicationsFragment(), false);
                 break;
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

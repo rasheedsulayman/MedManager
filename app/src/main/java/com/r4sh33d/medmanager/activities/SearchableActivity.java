@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +15,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.r4sh33d.medmanager.recycleradapters.MedicationsListAdapter;
+import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationDBContract;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
 import com.r4sh33d.medmanager.models.Medication;
@@ -43,7 +45,7 @@ public class SearchableActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        medicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>());
+        medicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>() , true);
         recyclerView.setAdapter(medicationsListAdapter);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);

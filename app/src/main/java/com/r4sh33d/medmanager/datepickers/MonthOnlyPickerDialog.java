@@ -1,10 +1,12 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.datepickers;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.widget.DatePicker;
+
+import com.r4sh33d.medmanager.R;
 
 public class MonthOnlyPickerDialog extends DatePickerDialog implements DatePicker.OnDateChangedListener {
 

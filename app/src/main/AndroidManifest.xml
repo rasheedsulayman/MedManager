@@ -12,32 +12,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
 
         </activity>
 
-        <service
-            android:name=".MedJobService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-
-        <receiver android:name=".MedJobBroadcastReceiver" />
-        <receiver android:name=".MedBootReceiver">
+        <receiver android:name=".brodcastrecievers.MedJobBroadcastReceiver" />
+        <receiver android:name=".brodcastrecievers.MedBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".SignInActivity">
+        <activity android:name=".activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SearchableActivity" />
+        <activity android:name=".activities.SearchableActivity" />
     </application>
 
 </manifest>

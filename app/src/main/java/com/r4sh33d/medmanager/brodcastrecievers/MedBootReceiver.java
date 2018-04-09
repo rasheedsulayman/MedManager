@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.brodcastrecievers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

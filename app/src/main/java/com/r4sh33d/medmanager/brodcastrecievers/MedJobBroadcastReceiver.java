@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.brodcastrecievers;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -16,6 +16,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
 import com.r4sh33d.medmanager.database.MedicationLoader;
 import com.r4sh33d.medmanager.models.Medication;

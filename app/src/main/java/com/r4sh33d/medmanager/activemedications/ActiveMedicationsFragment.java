@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.r4sh33d.medmanager.MedicationsListAdapter;
+import com.r4sh33d.medmanager.recycleradapters.MedicationsListAdapter;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationLoader;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
@@ -57,7 +57,7 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activeMedicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>());
+        activeMedicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>() , false);
         medsListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         medsListRecyclerView.setAdapter(activeMedicationsListAdapter);
     }
