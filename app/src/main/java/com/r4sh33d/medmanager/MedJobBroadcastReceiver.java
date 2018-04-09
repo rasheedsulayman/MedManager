@@ -5,7 +5,6 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
-import com.r4sh33d.medmanager.database.MedicationDao;
+import com.r4sh33d.medmanager.database.MedicationLoader;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;
 import com.r4sh33d.medmanager.utility.Utils;
@@ -38,7 +37,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
         SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
 
         if (medicationRowId != -1) {
-            Medication medication = MedicationDao.getMedicationInfoWithId(medicationRowId , db);
+            Medication medication = MedicationLoader.getMedicationInfoWithId(medicationRowId , db);
             //send Notification here
             Log.d(TAG , "Medication gotten from the DB " + medication);
             sendNotification(medication , context);
@@ -46,7 +45,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
             if ( newRingTime < medication.endTime){
                 //if we are still in bound, schedule another alarm
                 Utils.scheduleAlarm(medication , context , intent , newRingTime);
-                MedicationDao.updateNextRingTime(medicationRowId , newRingTime, db);
+                MedicationLoader.updateNextRingTime(medicationRowId , newRingTime, db);
             }
         }
     }
@@ -83,7 +82,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
     @TargetApi(Build.VERSION_CODES.O)
     private void setUPNotificationChannel(NotificationManager notificationManager) {
         CharSequence name = "Med Manager Channel";
-        String description = "This Notification Channel remind you of your scheduled medications uaing the Med Manager APP";
+        String description = "This Notification Channel remind you of your scheduled medications using the Med Manager APP";
         NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANEL_ID, name,
                 NotificationManager.IMPORTANCE_HIGH);
         channel.setDescription(description);
@@ -93,5 +92,4 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
         channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
         notificationManager.createNotificationChannel(channel);
     }
-
 }

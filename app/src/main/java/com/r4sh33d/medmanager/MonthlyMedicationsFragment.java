@@ -1,11 +1,11 @@
 package com.r4sh33d.medmanager;
 
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.r4sh33d.medmanager.database.MedicationDBContract;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
-import com.r4sh33d.medmanager.datepickers.DatePickerFragment;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Utils;
 
@@ -36,10 +35,10 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MonthlyMedicationsFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Medication>> {
+public class MonthlyMedicationsFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<ArrayList<Medication>> {
     @BindView(R.id.fab)
     FloatingActionButton changeMonthFab;
-
     @BindView(R.id.recyclerview)
     RecyclerView monthlyRecyclerView;
 
@@ -72,23 +71,21 @@ public class MonthlyMedicationsFragment extends Fragment implements LoaderManage
         Utils.setCalenderDefault(calendar);
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Calendar thisMonthCalender = Calendar.getInstance();
-        calendar.set(Calendar.YEAR , thisMonthCalender.get(Calendar.YEAR));
-        calendar.set(Calendar.MONTH , thisMonthCalender.get(Calendar.MONTH));
-        monthLabel.setText(getFormattedDateFormantLabel(calendar));
+        calendar.set(Calendar.YEAR, thisMonthCalender.get(Calendar.YEAR));
+        calendar.set(Calendar.MONTH, thisMonthCalender.get(Calendar.MONTH));
+        monthLabel.setText(getFormattedTextForMonthLabel(calendar));
         MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
         getLoaderManager().initLoader(0, null, this);
     }
 
-
     @NonNull
     @Override
-    public Loader<ArrayList<Medication>> onCreateLoader(int id, Bundle args) {
-        return new MedicationsListLoader(getContext(), MONTHLY_INTERVAL_SELECTION , null);
+    public Loader<ArrayList<Medication>> onCreateLoader (int id, Bundle args) {
+        return new MedicationsListLoader(getContext(), MONTHLY_INTERVAL_SELECTION, null);
     }
 
     @Override
@@ -100,32 +97,35 @@ public class MonthlyMedicationsFragment extends Fragment implements LoaderManage
     public void onLoaderReset(@NonNull Loader<ArrayList<Medication>> loader) {
     }
 
-    public void onDateSet (boolean isStartDate, DatePicker view, int year, int month, int dayOfMonth) {
-        calendar.set(Calendar.YEAR,year);
-        calendar.set(Calendar.MONTH , month);
-        monthLabel.setText(getFormattedDateFormantLabel(calendar));
+    public void onDatePicked(int year, int month) {
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        monthLabel.setText(getFormattedTextForMonthLabel(calendar));
         MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
         getLoaderManager().restartLoader(0, null, this);
     }
 
-    String getFormattedDateFormantLabel(Calendar calendar){
-        SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
-        return  month_date.format(calendar.getTime());
+    String getFormattedTextForMonthLabel(Calendar calendar) {
+        SimpleDateFormat month_date = new SimpleDateFormat("MMMM , yyyy", Locale.getDefault());
+        return "Showing active medications for "  + month_date.format(calendar.getTime());
     }
 
-    String getMonthIntervalSelection (Calendar calendar) {
+    String getMonthIntervalSelection(Calendar calendar) {
         long startInterval = calendar.getTimeInMillis();
         calendar.add(Calendar.MONTH, 1);
         long endInterval = calendar.getTimeInMillis();
-        return  startInterval + " >= " + MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME
-                + "AND " + endInterval + " <= " + MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME;
+        return MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME + " >= " + startInterval
+                + " AND " + MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + " <= " + endInterval;
     }
-
 
     @OnClick(R.id.fab)
     void onCLickFab() {
-        DialogFragment newFragment = DatePickerFragment.newInstance(true, false);
-        newFragment.setTargetFragment(this, 0);
-        newFragment.show(getFragmentManager(), "datePicker");
+        MonthOnlyPickerDialog pickerDialog = new MonthOnlyPickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                onDatePicked(year, month);
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        pickerDialog.show();
     }
 }

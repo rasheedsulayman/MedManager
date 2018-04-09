@@ -10,7 +10,7 @@ import com.r4sh33d.medmanager.models.Medication;
 
 import java.util.ArrayList;
 
-public class MedicationDao {
+public class MedicationLoader {
 
     public static String[] projection = {
             BaseColumns._ID,
@@ -23,7 +23,8 @@ public class MedicationDao {
             MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME
     };
 
-    public static String ACTIVE_MEDICATION_SELECTION = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + ">" + System.currentTimeMillis();
+    public static String ACTIVE_MEDICATION_SELECTION = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + ">"
+            + System.currentTimeMillis();
 
     public static Medication getMedicationInfoWithId(long rowId, SQLiteDatabase db) {
         String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
@@ -34,18 +35,26 @@ public class MedicationDao {
         return getMedicationsListFromCursor(getMedicationCursor(selection , db));
     }
 
-    public static  int  updateNextRingTime(long rowId , long newRIngTime , SQLiteDatabase db){
+    public static  int updateNextRingTime(long rowId , long newRIngTime , SQLiteDatabase db){
         ContentValues values = new ContentValues();
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME, newRIngTime);
         String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
-        String[] selectionArgs = { "MyOldTitle" };
         return db.update(
                 MedicationDBContract.MedicationEntry.TABLE_NAME,
                 values,
                 selection,
-                selectionArgs);
+                null);
     }
 
+
+    public static int updateMedication(ContentValues contentValues , long rowId , SQLiteDatabase db) {
+        String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
+        return db.update(
+                MedicationDBContract.MedicationEntry.TABLE_NAME,
+                contentValues,
+                selection,
+                null);
+    }
 
     public static Cursor getMedicationCursor(String selection, SQLiteDatabase db) {
 
@@ -60,6 +69,20 @@ public class MedicationDao {
         );
 
         return cursor;
+    }
+
+    public static ContentValues getContentValuesForMedication (Medication medication){
+        ContentValues values = new ContentValues();
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME, medication.name);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION, medication.description);
+        values.put(MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY , medication.quantity);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME, medication.startTime);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME , medication.endTime);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL , medication.interval);
+        if (medication.nextRingTime > 0) {
+            values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME , medication.nextRingTime);
+        }
+        return values;
     }
 
     public static ArrayList<Medication> getMedicationsListFromCursor(Cursor cursor) {

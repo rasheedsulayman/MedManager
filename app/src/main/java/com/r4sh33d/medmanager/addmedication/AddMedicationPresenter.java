@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.r4sh33d.medmanager.database.MedicationDBContract;
+import com.r4sh33d.medmanager.database.MedicationLoader;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Utils;
 
@@ -26,16 +27,9 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
 
 
     @Override
-    public void addMedicationToDb(Medication medication , SQLiteOpenHelper sqLiteOpenHelper) {
+    public void addMedicationToDb(Medication medication , SQLiteDatabase db) {
         // Gets the data repository in write mode
-        SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME, medication.name);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION, medication.description);
-        values.put(MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY , medication.quantity);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME, medication.startTime);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME , medication.endTime);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL , medication.interval);
+        ContentValues values = MedicationLoader.getContentValuesForMedication(medication);
         medication.dbRowId = db.insert(MedicationDBContract.MedicationEntry.TABLE_NAME, null, values);
         view.onMedicationInsertedToDb(medication);
     }
@@ -47,5 +41,12 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
         }else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, medication.startTime, alarmIntent);
         }
+    }
+
+    @Override
+    public void updateMedication(Medication medication, SQLiteDatabase db) {
+        ContentValues contentValues = MedicationLoader.getContentValuesForMedication(medication);
+        MedicationLoader.updateMedication(contentValues , medication.dbRowId , db);
+        view.onMedicationUpdated();
     }
 }

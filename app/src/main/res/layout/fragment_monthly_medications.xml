@@ -5,27 +5,30 @@
     tools:context="com.r4sh33d.medmanager.MonthlyMedicationsFragment">
 
     <LinearLayout
+        android:layout_margin="16dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/month_label"
-            android:textSize="16sp"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Show medication in take for Month January, 2018" />
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            tools:text="Show medication in take for Month January, 2018"
+            android:textSize="16sp"/>
 
         <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/month_label"
             android:id="@+id/recyclerview"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
     </LinearLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

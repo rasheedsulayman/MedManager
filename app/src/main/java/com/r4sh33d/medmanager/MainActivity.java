@@ -1,5 +1,6 @@
 package com.r4sh33d.medmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,27 +23,35 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.r4sh33d.medmanager.activemedications.ActiveMedicationsFragment;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
+import com.r4sh33d.medmanager.models.Medication;
+import com.r4sh33d.medmanager.utility.Constants;
 
-public class DrawerActivity extends AppCompatActivity
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_acitivity);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        navigateToFragment(new ActiveMedicationsFragment());
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(0);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
@@ -51,6 +60,15 @@ public class DrawerActivity extends AppCompatActivity
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getIdToken() instead.
             String uid = user.getUid();
+        }
+        Intent openingIntent = getIntent();
+        if (openingIntent.getAction() != null &&
+                openingIntent.getAction().equalsIgnoreCase(Constants.ACTION_NAVIGATE_TO_ADD_MEDICATION)) {
+            //We could open this activity, just to edit Medication, from SearchActivity.
+            Medication medication = openingIntent.getParcelableExtra(Constants.KEY_MEDICATION_BUNDLE);
+            navigateToFragment(AddMedicationFragment.newInstance(medication) , false);
+        }else {
+            navigateToFragment(new ActiveMedicationsFragment(), false);
         }
     }
 
@@ -90,9 +108,9 @@ public class DrawerActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
+            startActivity(new Intent(this , SearchableActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -104,13 +122,10 @@ public class DrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_active_med_list:
-                navigateToFragment(new ActiveMedicationsFragment());
-                break;
-            case R.id.nav_add_new_med:
-                navigateToFragment(new AddMedicationFragment());
+                navigateToFragment(new ActiveMedicationsFragment(), false);
                 break;
             case R.id.nav_medications_by_month:
-                navigateToFragment(new MonthlyMedicationsFragment());
+                navigateToFragment(new MonthlyMedicationsFragment(), false);
                 break;
         }
 
@@ -119,10 +134,12 @@ public class DrawerActivity extends AppCompatActivity
         return true;
     }
 
-    void navigateToFragment(Fragment fragment) {
+    void navigateToFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
         transaction.commit();
     }
-
 }

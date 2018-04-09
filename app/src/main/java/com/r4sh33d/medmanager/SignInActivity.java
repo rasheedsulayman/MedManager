@@ -10,9 +10,7 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class SignInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
@@ -26,7 +24,7 @@ public class SignInActivity extends AppCompatActivity {
         if (auth.getCurrentUser() != null) {
             // already signed in
             Log.d(TAG , "Already signed in, starting Drawer Activity");
-            startActivity(new Intent(this , DrawerActivity.class));
+            startActivity(new Intent(this , MainActivity.class));
             finish();
         } else {
             //not signed in
@@ -52,7 +50,7 @@ public class SignInActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                startActivity(new Intent(this , DrawerActivity.class));
+                startActivity(new Intent(this , MainActivity.class));
                 finish();
             } else {
                 // Sign in failed

@@ -8,10 +8,6 @@
             android:id="@+id/nav_active_med_list"
             android:icon="@drawable/ic_menu_camera"
             android:title="Active Medications" />
-        <item
-            android:id="@+id/nav_add_new_med"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="New Medication" />
 
         <item
             android:id="@+id/nav_medications_by_month"

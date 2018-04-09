@@ -43,6 +43,7 @@ public class Medication  implements Parcelable {
         endTime = in.readLong();
         interval = in.readLong();
         dbRowId = in.readLong();
+        nextRingTime = in.readLong();
     }
 
     @Override
@@ -54,6 +55,7 @@ public class Medication  implements Parcelable {
         dest.writeLong(endTime);
         dest.writeLong(interval);
         dest.writeLong(dbRowId);
+        dest.writeLong(nextRingTime);
     }
 
     @Override
@@ -83,6 +85,7 @@ public class Medication  implements Parcelable {
                 ", endTime=" + endTime +
                 ", interval=" + interval +
                 ", dbRowId=" + dbRowId +
+                ", nextRingTime=" + nextRingTime +
                 '}';
     }
 }

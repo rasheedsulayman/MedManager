@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import com.r4sh33d.medmanager.MedicationsListAdapter;
 import com.r4sh33d.medmanager.R;
-import com.r4sh33d.medmanager.database.MedicationDao;
+import com.r4sh33d.medmanager.database.MedicationLoader;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
 import com.r4sh33d.medmanager.models.Medication;
 
@@ -65,7 +65,7 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
     @NonNull
     @Override
     public Loader<ArrayList<Medication>> onCreateLoader(int id, Bundle args) {
-        return new MedicationsListLoader(getContext() , MedicationDao.ACTIVE_MEDICATION_SELECTION , null);
+        return new MedicationsListLoader(getContext() , MedicationLoader.ACTIVE_MEDICATION_SELECTION , null);
     }
 
     @Override

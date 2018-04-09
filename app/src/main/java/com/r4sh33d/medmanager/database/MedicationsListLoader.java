@@ -32,7 +32,7 @@ public class MedicationsListLoader extends WrappedAsyncTaskLoader<ArrayList<Medi
     public ArrayList<Medication> loadInBackground() {
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(getContext());
         SQLiteDatabase db = medicationDBHelper.getReadableDatabase();
-        ArrayList<Medication> medications =  MedicationDao.getMedicationsList(db , selection);
+        ArrayList<Medication> medications =  MedicationLoader.getMedicationsList(db , selection);
         db.close();
         return medications;
     }
