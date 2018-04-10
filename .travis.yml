@@ -20,5 +20,7 @@ script:
   - emulator -avd test -no-skin -no-window &
   - android-wait-for-emulator
   - ./gradlew connectedCheck
+before_install:
+ - chmod +x gradlew
 after_success:
   - bash <(curl -s https://codecov.io/bash)
