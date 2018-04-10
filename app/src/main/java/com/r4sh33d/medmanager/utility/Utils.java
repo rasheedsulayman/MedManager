@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.widget.EditText;
 
 import com.r4sh33d.medmanager.models.Interval;
 import com.r4sh33d.medmanager.models.Medication;
@@ -42,5 +43,15 @@ public class Utils {
             }
         }
         return 0;
+    }
+
+    public static boolean validateEditTexts(EditText... editTexts) {
+        for (EditText newEdittext : editTexts) {
+            if (newEdittext.getText().toString().trim().length() < 1) {
+                newEdittext.setError("This Field is required");
+                return false;
+            }
+        }
+        return true;
     }
 }

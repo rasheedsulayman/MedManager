@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.r4sh33d.medmanager.BaseFragment;
+import com.r4sh33d.medmanager.activities.MainActivity;
 import com.r4sh33d.medmanager.brodcastrecievers.MedJobBroadcastReceiver;
 import com.r4sh33d.medmanager.models.Interval;
 import com.r4sh33d.medmanager.R;
@@ -47,7 +49,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddMedicationFragment extends Fragment implements AddMedicationContract.View {
+public class AddMedicationFragment extends BaseFragment implements AddMedicationContract.View {
     private static String TAG = AddMedicationFragment.class.getSimpleName();
     @BindView(R.id.medication_name_edit_text)
     EditText medicationNameEditText;
@@ -95,6 +97,8 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         addMedicationPresenter = new AddMedicationPresenter(this);
         startingDateCalender = Calendar.getInstance();
         endingDateCalender = Calendar.getInstance();
@@ -102,9 +106,15 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
         Utils.setCalenderDefault(endingDateCalender);
         prepareSpinner();
         if (getArguments() != null  && getArguments().getParcelable(MED_OBJECT_ARG) != null){
+            //We want to edit medication
+            setToolbarTitle("Edit Medication");
             Medication medication = getArguments().getParcelable(MED_OBJECT_ARG);
             medIdToEdit = medication.dbRowId;
             prepopulateFields(medication);
+        }else {
+            setToolbarTitle("Add new Medication");
+            // We want to add new medication
+
         }
     }
 
@@ -127,14 +137,14 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
         medicationIntervalSpinner.setAdapter(adapter);
     }
 
-    @OnClick(R.id.starting_date_value)
+    @OnClick(R.id.starting_date_linearlayout)
     void onClickStartingDate() {
         DialogFragment newFragment = DatePickerFragment.newInstance(true, true);
         newFragment.setTargetFragment(this, 0);
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    @OnClick(R.id.starting_time_value)
+    @OnClick(R.id.starting_time_linearlayout)
     void onClickStartingTimeValue() {
         TimePickerFragment newFragment = TimePickerFragment.newInstance(true);
         newFragment.setTargetFragment(this, 0);
@@ -142,7 +152,7 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
     }
 
 
-    @OnClick(R.id.ending_date_value)
+    @OnClick(R.id.ending_date_linearlayout)
     void onClickEndingDateValue() {
         DialogFragment newFragment = DatePickerFragment.newInstance(false, true);
         newFragment.setTargetFragment(this, 0);
@@ -178,11 +188,11 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
     @OnClick(R.id.button)
     void onClickSave() {
         Interval interval = (Interval) medicationIntervalSpinner.getSelectedItem();
-        if (!validateEditTexts(medicationNameEditText)) {
+        if (!Utils.validateEditTexts(medicationNameEditText)) {
             showToast("Please enter medication name ");
             return;
         }
-        if (!validateEditTexts(medicationQuantityEditText)) {
+        if (!Utils.validateEditTexts(medicationQuantityEditText)) {
             showToast("Please enter quantity to proceed ");
             return;
         }
@@ -213,7 +223,6 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
         }else {
             addMedicationPresenter.addMedicationToDb(medication,db );
         }
-
         db.close();
 
     }
@@ -248,15 +257,5 @@ public class AddMedicationFragment extends Fragment implements AddMedicationCont
             startTime = dateFormat.format(startingDateCalender.getTime());
             startingTimeValue.setText(startTime);
         }
-    }
-
-    public static boolean validateEditTexts(EditText... editTexts) {
-        for (EditText newEdittext : editTexts) {
-            if (newEdittext.getText().toString().trim().length() < 1) {
-                newEdittext.setError("This Field is required");
-                return false;
-            }
-        }
-        return true;
     }
 }

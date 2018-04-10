@@ -30,7 +30,6 @@ import com.r4sh33d.medmanager.utility.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawer_acitivity);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -69,9 +68,10 @@ public class MainActivity extends AppCompatActivity
                 openingIntent.getAction().equalsIgnoreCase(Constants.ACTION_NAVIGATE_TO_ADD_MEDICATION)) {
             //We could open this activity, just to edit Medication, from SearchActivity.
             Medication medication = openingIntent.getParcelableExtra(Constants.KEY_MEDICATION_BUNDLE);
-            navigateToFragment(AddMedicationFragment.newInstance(medication) , false);
+            navigateToFragment(AddMedicationFragment.newInstance(medication));
         }else {
-            navigateToFragment(new ActiveMedicationsFragment(), false);
+            //coming from the launcher
+            navigateToFragment(new ActiveMedicationsFragment());
         }
     }
 
@@ -96,11 +96,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @OnClick(R.id.fab)
-    void onClickFab(){
-        navigateToFragment(AddMedicationFragment.newInstance(null) , true);
     }
 
     @Override
@@ -129,11 +124,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.nav_active_med_list:
-                navigateToFragment(new ActiveMedicationsFragment(), false);
+                navigateToFragment(new ActiveMedicationsFragment());
                 break;
             case R.id.nav_medications_by_month:
-                navigateToFragment(new MonthlyMedicationsFragment(), false);
+                navigateToFragment(new MonthlyMedicationsFragment());
                 break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -141,12 +139,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    void navigateToFragment(Fragment fragment, boolean addToBackStack) {
+    void navigateToFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
-        if (addToBackStack) {
-            transaction.addToBackStack(null);
-        }
         transaction.commit();
     }
 }

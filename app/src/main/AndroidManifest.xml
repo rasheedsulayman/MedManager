@@ -29,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SearchableActivity" />
+        <activity android:name=".activities.SearchableActivity"
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>

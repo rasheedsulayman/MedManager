@@ -1,199 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:orientation="vertical">
 
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Medication Name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-        <EditText
-
-            android:id="@+id/medication_name_edit_text"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medication Description"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="4dp">
 
-        <EditText
-            android:id="@+id/medication_description_edit_text"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medication Name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <EditText
+                    android:id="@+id/medication_name_edit_text"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="Add medication name" />
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quantity"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="4dp">
 
-        <EditText
-            android:id="@+id/medication_quantity_edit_text"
+
+            <LinearLayout
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medication Description"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <EditText
+                    android:hint="Add medication quantity"
+                    android:id="@+id/medication_description_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_marginBottom="8dp"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Interval"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/medication_interval_spinner"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:saveEnabled="true"
-            android:spinnerMode="dropdown" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quantity"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-        <View
-            android:layout_width="200dp"
-            android:layout_height="0.5dp"
-            android:background="@android:color/black" />
+                <EditText
+                    android:hint="Add medication quantity"
+                    android:id="@+id/medication_quantity_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
 
-        <LinearLayout
-            android:visibility="gone"
-            android:orientation="horizontal"
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:gravity="center"
-                android:hint="hh"
-                android:inputType="number"
-                android:id="@+id/medication_interval_hour_edit_text"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_marginRight="2dp"
-                android:text=":"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:gravity="center"
-                android:hint="mm"
-                android:inputType="number"
-                android:id="@+id/medication_interval_min_edit_text"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content" />
-
-
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="Medication Schedule"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="4dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Interval"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <Spinner
+                    android:id="@+id/medication_interval_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="8dp"
+                    android:saveEnabled="true"
+                    android:spinnerMode="dropdown" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/black" />
+            </LinearLayout>
+
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Starting Date"
-            android:textSize="16dp" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/starting_date_value"
-            android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="Medication Schedule"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_margin="4dp"
+                    app:cardCornerRadius="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_margin="4dp"
+                        android:id="@+id/starting_date_linearlayout"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:textColor="@color/almost_black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Starting Date"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:layout_marginTop="4dp"
+                            android:id="@+id/starting_date_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Touch here to set date " />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_margin="4dp"
+                    app:cardCornerRadius="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_margin="4dp"
+                        android:id="@+id/starting_time_linearlayout"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:textColor="@color/almost_black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Starting time"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:layout_marginTop="4dp"
+                            android:id="@+id/starting_time_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Touch here to set date "  />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_margin="4dp"
+                    app:cardCornerRadius="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_margin="4dp"
+                        android:id="@+id/ending_date_linearlayout"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:textColor="@color/almost_black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ending Date"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:layout_marginTop="4dp"
+                            android:id="@+id/ending_date_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Touch here to set date " />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+
+
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:padding="8dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Touch here to set date " />
-
-        <TextView
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Starting time"
-            android:textSize="16dp" />
-
-        <TextView
-            android:text="Touch here to set Time"
-            android:id="@+id/starting_time_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="12 : 30 am" />
-
-        <TextView
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ending Date"
-            android:textSize="16dp" />
-
-        <TextView
-            android:text="Touch here to set date "
-            android:id="@+id/ending_date_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="01/05/2019" />
-
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/button"
-         android:text="Next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            android:text="Next" />
 
     </LinearLayout>
 

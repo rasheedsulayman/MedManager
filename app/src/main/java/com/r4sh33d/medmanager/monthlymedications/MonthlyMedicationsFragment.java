@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.r4sh33d.medmanager.BaseFragment;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationDBContract;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
@@ -38,7 +39,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MonthlyMedicationsFragment extends Fragment implements
+public class MonthlyMedicationsFragment extends BaseFragment implements
         LoaderManager.LoaderCallbacks<ArrayList<Medication>> {
     @BindView(R.id.fab)
     FloatingActionButton changeMonthFab;
@@ -80,7 +81,8 @@ public class MonthlyMedicationsFragment extends Fragment implements
         Calendar thisMonthCalender = Calendar.getInstance();
         calendar.set(Calendar.YEAR, thisMonthCalender.get(Calendar.YEAR));
         calendar.set(Calendar.MONTH, thisMonthCalender.get(Calendar.MONTH));
-        monthLabel.setText(getFormattedTextForMonthLabel(calendar));
+        //monthLabel.setText(getFormattedTextForMonthLabel(calendar));
+        setToolbarTitle(getFormattedTextForMonthLabel(calendar));
         MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
         getLoaderManager().initLoader(0, null, this);
     }
@@ -103,14 +105,15 @@ public class MonthlyMedicationsFragment extends Fragment implements
     public void onDatePicked(int year, int month) {
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
-        monthLabel.setText(getFormattedTextForMonthLabel(calendar));
+        //monthLabel.setText(getFormattedTextForMonthLabel(calendar));
+        setToolbarTitle(getFormattedTextForMonthLabel(calendar));
         MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
         getLoaderManager().restartLoader(0, null, this);
     }
 
     String getFormattedTextForMonthLabel(Calendar calendar) {
         SimpleDateFormat month_date = new SimpleDateFormat("MMMM , yyyy", Locale.getDefault());
-        return "Showing active medications for "  + month_date.format(calendar.getTime());
+        return "Medications for "  + month_date.format(calendar.getTime());
     }
 
     String getMonthIntervalSelection(Calendar calendar) {

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.r4sh33d.medmanager.BaseFragment;
+import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
 import com.r4sh33d.medmanager.recycleradapters.MedicationsListAdapter;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.database.MedicationLoader;
@@ -24,13 +27,14 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ActiveMedicationsFragment extends DialogFragment implements ActiveMedicationsContract.View ,
-        LoaderManager.LoaderCallbacks<ArrayList<Medication>>{
+public class ActiveMedicationsFragment extends BaseFragment implements ActiveMedicationsContract.View,
+        LoaderManager.LoaderCallbacks<ArrayList<Medication>> {
 
     @BindView(R.id.recyclerview)
     RecyclerView medsListRecyclerView;
@@ -50,22 +54,34 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_active_medications, container, false);
-        ButterKnife.bind(this , view);
+        ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activeMedicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>() , false);
+        activeMedicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>(), false);
         medsListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         medsListRecyclerView.setAdapter(activeMedicationsListAdapter);
+    }
+
+    @OnClick(R.id.fab)
+    void onClickFab() {
+        navigateToFragment(AddMedicationFragment.newInstance(null));
+    }
+
+    void navigateToFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @NonNull
     @Override
     public Loader<ArrayList<Medication>> onCreateLoader(int id, Bundle args) {
-        return new MedicationsListLoader(getContext() , MedicationLoader.ACTIVE_MEDICATION_SELECTION , null);
+        return new MedicationsListLoader(getContext(), MedicationLoader.ACTIVE_MEDICATION_SELECTION, null);
     }
 
     @Override
@@ -74,8 +90,10 @@ public class ActiveMedicationsFragment extends DialogFragment implements ActiveM
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<ArrayList<Medication>> loader) {}
+    public void onLoaderReset(@NonNull Loader<ArrayList<Medication>> loader) {
+    }
 
     @Override
-    public void moveToNextStep() {}
+    public void moveToNextStep() {
+    }
 }
