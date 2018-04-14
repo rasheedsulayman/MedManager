@@ -5,10 +5,12 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.r4sh33d.medmanager.database.MedicationDBContract;
 import com.r4sh33d.medmanager.database.MedicationLoader;
 import com.r4sh33d.medmanager.models.Medication;
+import com.r4sh33d.medmanager.utility.LocalData;
 import com.r4sh33d.medmanager.utility.Utils;
 
 /**
@@ -17,20 +19,21 @@ import com.r4sh33d.medmanager.utility.Utils;
 
 public class AddMedicationPresenter implements AddMedicationContract.Presenter {
     private AddMedicationContract.View view;
+    private static final String TAG = AddMedicationPresenter.class.getSimpleName();
 
     AddMedicationPresenter(AddMedicationContract.View view) {
         this.view = view;
     }
 
     @Override
-    public void start() {}
+    public void start() {
+    }
 
 
     @Override
-    public void addMedicationToDb(Medication medication , SQLiteDatabase db) {
+    public void addMedicationToDb(Medication medication, SQLiteDatabase db) {
         // Gets the data repository in write mode
-        ContentValues values = MedicationLoader.getContentValuesForMedication(medication);
-        medication.dbRowId = db.insert(MedicationDBContract.MedicationEntry.TABLE_NAME, null, values);
+        medication.dbRowId = MedicationLoader.addMedication(medication, db);
         view.onMedicationInsertedToDb(medication);
     }
 
@@ -38,15 +41,14 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
     public void scheduleNotificationJob(AlarmManager alarmManager, Medication medication, PendingIntent alarmIntent) {
         if (Utils.isKitKatAndAbove()) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, medication.startTime, alarmIntent);
-        }else {
+        } else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, medication.startTime, alarmIntent);
         }
     }
 
     @Override
     public void updateMedication(Medication medication, SQLiteDatabase db) {
-        ContentValues contentValues = MedicationLoader.getContentValuesForMedication(medication);
-        MedicationLoader.updateMedication(contentValues , medication.dbRowId , db);
+        MedicationLoader.updateMedication(medication, db);
         view.onMedicationUpdated();
     }
 }

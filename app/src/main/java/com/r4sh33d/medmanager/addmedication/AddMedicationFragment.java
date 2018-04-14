@@ -11,9 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -61,8 +63,6 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
     TextView startingDateValue;
     @BindView(R.id.ending_date_value)
     TextView endingDateValue;
-    @BindView(R.id.medication_interval_hour_edit_text)
-    TextView medicationIntervalEditText;
     @BindView(R.id.starting_time_value)
     TextView startingTimeValue;
     @BindView(R.id.medication_interval_spinner)
@@ -71,7 +71,7 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
     AddMedicationContract.Presenter addMedicationPresenter;
     String startDate, startTime, endDate;
     private static String MED_OBJECT_ARG = "medication_object";
-    private long medIdToEdit = -1;
+    private Medication medicationToEdit;
 
     public AddMedicationFragment() {
         // Required empty public constructor
@@ -85,7 +85,6 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
         return fragment;
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,24 +96,23 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        ((MainActivity) getActivity()).setDrawerIconToBack();
         addMedicationPresenter = new AddMedicationPresenter(this);
         startingDateCalender = Calendar.getInstance();
         endingDateCalender = Calendar.getInstance();
         Utils.setCalenderDefault(startingDateCalender);
         Utils.setCalenderDefault(endingDateCalender);
         prepareSpinner();
-        if (getArguments() != null  && getArguments().getParcelable(MED_OBJECT_ARG) != null){
+        if (getArguments() != null && getArguments().getParcelable(MED_OBJECT_ARG) != null) {
             //We want to edit medication
             setToolbarTitle("Edit Medication");
             Medication medication = getArguments().getParcelable(MED_OBJECT_ARG);
-            medIdToEdit = medication.dbRowId;
+            medicationToEdit = medication;
+            //prepopulate the fields with the details of the Medication to edit
             prepopulateFields(medication);
-        }else {
-            setToolbarTitle("Add new Medication");
+        } else {
             // We want to add new medication
-
+            setToolbarTitle("Add new Medication");
         }
     }
 
@@ -124,10 +122,15 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
         endDate = formatter.format(medication.endTime);
         formatter.applyPattern("hh:mm a");
         startTime = formatter.format(medication.startTime);
+        startingTimeValue.setText(startTime);
+        endingDateValue.setText(endDate);
+        startingDateValue.setText(startDate);
+        startingDateCalender.setTimeInMillis(medication.startTime);
+        endingDateCalender.setTimeInMillis(medication.endTime);
         medicationNameEditText.setText(medication.name);
         medicationQuantityEditText.setText(medication.quantity);
         medicationDescriptionEditText.setText(medication.description);
-        int position = Utils.getSpinnerIndexFromMedicationsList(medication.interval , LocalData.intervalArrayList);
+        int position = Utils.getSpinnerIndexFromMedicationsList(medication.interval, LocalData.intervalArrayList);
         medicationIntervalSpinner.setSelection(position);
     }
 
@@ -176,7 +179,7 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
     @Override
     public void onMedicationUpdated() {
         Toast.makeText(getContext(), "Medication updated", Toast.LENGTH_SHORT).show();
-         moveToNextStep();
+        moveToNextStep();
     }
 
     @Override
@@ -187,7 +190,6 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
 
     @OnClick(R.id.button)
     void onClickSave() {
-        Interval interval = (Interval) medicationIntervalSpinner.getSelectedItem();
         if (!Utils.validateEditTexts(medicationNameEditText)) {
             showToast("Please enter medication name ");
             return;
@@ -208,6 +210,11 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
             showToast("Please enter end date to proceed");
             return;
         }
+        perFormAddOrEditAction();
+    }
+
+    void perFormAddOrEditAction() {
+        Interval interval = (Interval) medicationIntervalSpinner.getSelectedItem();
         Medication medication = new Medication(medicationNameEditText.getText().toString(),
                 medicationDescriptionEditText.getText().toString(),
                 medicationQuantityEditText.getText().toString(),
@@ -216,15 +223,15 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
                 interval.getTimeInMilliseconds());
         Log.d(TAG, "The values are " + medication);
         SQLiteDatabase db = new MedicationDBHelper(getContext()).getWritableDatabase();
-        if (medIdToEdit != - 1){
+        if (medicationToEdit != null) {
             //We have medication, we just want to edit
-            medication.dbRowId = medIdToEdit;
-            addMedicationPresenter.updateMedication(medication ,db );
-        }else {
-            addMedicationPresenter.addMedicationToDb(medication,db );
+            medication.dbRowId = medicationToEdit.dbRowId;
+            medication.nextRingTime = medicationToEdit.nextRingTime;
+            addMedicationPresenter.updateMedication(medication, db);
+        } else {
+            addMedicationPresenter.addMedicationToDb(medication, db);
         }
         db.close();
-
     }
 
     public void showToast(String message) {
@@ -242,8 +249,9 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
             endingDateCalender.set(year, month, dayOfMonth);
             //this calender instance is from 00:00 am this 'day of the month',
             // we want our alarms to still be valid till the end of that day ,
-            //so shift by 24 hours
+            //so shift by 23 hours, 59 minutes, 59 seconds, 999 milliseconds
             endingDateCalender.set(Calendar.HOUR_OF_DAY, 24);
+            endingDateCalender.setTimeInMillis(endingDateCalender.getTimeInMillis() - 1);
             endDate = month_date.format(endingDateCalender.getTime());
             endingDateValue.setText(endDate);
         }

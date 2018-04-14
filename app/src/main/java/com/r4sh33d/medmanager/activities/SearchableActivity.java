@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 
 public class SearchableActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Medication>>, SearchView.OnQueryTextListener {
-
+      private static final  String TAG = SearchableActivity.class.getSimpleName();
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.recyclerview)
@@ -36,7 +37,7 @@ public class SearchableActivity extends AppCompatActivity implements
 
     private String queryEntered;
     private MedicationsListAdapter medicationsListAdapter;
-    private String SEARCH_FILTER;
+    private String SEARCH_FILTER = MedicationDBContract.MedicationEntry._ID + " = -1";//We want an empty page at first
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,9 @@ public class SearchableActivity extends AppCompatActivity implements
             return true;
         }
         queryEntered = newText.trim();
-        if (!TextUtils.isEmpty(queryEntered)) {
-            SEARCH_FILTER = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME +  " LIKE %" + queryEntered + "%";
+        if (!TextUtils.isEmpty(queryEntered) && queryEntered.length() >= 2) {
+            SEARCH_FILTER = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME +  " LIKE '%" + queryEntered + "%'";
+            Log.d(TAG,"Search filter now is : \n" + SEARCH_FILTER);
             getSupportLoaderManager().restartLoader(0, null, this);
         }
         return true;
@@ -79,6 +81,7 @@ public class SearchableActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Medication>> loader, ArrayList<Medication> data) {
+        Log.d(TAG , "ONLOadFinished, Length is " + data.size());
         medicationsListAdapter.updateData(data);
     }
 

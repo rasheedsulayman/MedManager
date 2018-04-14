@@ -3,9 +3,9 @@ package com.r4sh33d.medmanager.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,9 +18,10 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.r4sh33d.medmanager.GlideApp;
 import com.r4sh33d.medmanager.monthlymedications.MonthlyMedicationsFragment;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.activemedications.ActiveMedicationsFragment;
@@ -35,12 +36,12 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+    private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
+    DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    ActionBarDrawerToggle drawerToggle;
 
 
     @Override
@@ -49,10 +50,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        drawerToggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -73,6 +74,12 @@ public class MainActivity extends AppCompatActivity
             //coming from the launcher
             navigateToFragment(new ActiveMedicationsFragment());
         }
+        drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     void setNavigationViewHeaderDetails(FirebaseUser user) {
@@ -83,8 +90,9 @@ public class MainActivity extends AppCompatActivity
         TextView userEmail = headerView.findViewById(R.id.user_email);
         userDisplayName.setText(user.getDisplayName());
         userEmail.setText(user.getEmail());
-        Glide.with(this)
+        GlideApp.with(this)
                 .load(user.getPhotoUrl())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(userProfilePic);
     }
 
@@ -107,6 +115,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG , "Item button pressed");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -115,18 +124,45 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_search) {
             startActivity(new Intent(this , SearchableActivity.class));
             return true;
+        }else if (id == android.R.id.home){
+            Log.d(TAG , "Android home clicked");
+            getSupportFragmentManager().popBackStack();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void setDrawerIconToBack() {
+        drawerToggle.setDrawerIndicatorEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        drawerToggle.syncState();
+        lockDrawer();
+    }
+
+    public void lockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    public void unlockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public void setDrawerIconToHome() {
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        drawerToggle.syncState();
+        unlockDrawer();
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
             case R.id.nav_active_med_list:
                 navigateToFragment(new ActiveMedicationsFragment());
                 break;

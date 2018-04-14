@@ -31,11 +31,11 @@ public class MedicationLoader {
         return getMedicationsListFromCursor(getMedicationCursor(selection, db)).get(0);
     }
 
-    public static ArrayList<Medication> getMedicationsList (SQLiteDatabase db , String selection) {
-        return getMedicationsListFromCursor(getMedicationCursor(selection , db));
+    public static ArrayList<Medication> getMedicationsList(SQLiteDatabase db, String selection) {
+        return getMedicationsListFromCursor(getMedicationCursor(selection, db));
     }
 
-    public static  int updateNextRingTime(long rowId , long newRIngTime , SQLiteDatabase db){
+    public static int updateNextRingTime(long rowId, long newRIngTime, SQLiteDatabase db) {
         ContentValues values = new ContentValues();
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME, newRIngTime);
         String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
@@ -46,9 +46,9 @@ public class MedicationLoader {
                 null);
     }
 
-
-    public static int updateMedication(ContentValues contentValues , long rowId , SQLiteDatabase db) {
-        String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(rowId);
+    public static int updateMedication( Medication medication, SQLiteDatabase db) {
+        ContentValues contentValues = MedicationLoader.getContentValuesForMedication(medication);
+        String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(medication.dbRowId);
         return db.update(
                 MedicationDBContract.MedicationEntry.TABLE_NAME,
                 contentValues,
@@ -67,20 +67,19 @@ public class MedicationLoader {
                 null,                   // don't filter by row groups
                 null               // The sort order
         );
-
         return cursor;
     }
 
-    public static ContentValues getContentValuesForMedication (Medication medication){
+    public static ContentValues getContentValuesForMedication(Medication medication) {
         ContentValues values = new ContentValues();
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME, medication.name);
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION, medication.description);
-        values.put(MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY , medication.quantity);
+        values.put(MedicationDBContract.MedicationEntry.COLOMN_MEDICATION_QUANTITY, medication.quantity);
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_START_TIME, medication.startTime);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME , medication.endTime);
-        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL , medication.interval);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME, medication.endTime);
+        values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_INTERVAL, medication.interval);
         if (medication.nextRingTime > 0) {
-            values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME , medication.nextRingTime);
+            values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME, medication.nextRingTime);
         }
         return values;
     }
@@ -113,4 +112,8 @@ public class MedicationLoader {
         return medicationArrayList;
     }
 
+    public static long addMedication(Medication medication, SQLiteDatabase db) {
+        ContentValues values = MedicationLoader.getContentValuesForMedication(medication);
+        return db.insert(MedicationDBContract.MedicationEntry.TABLE_NAME, null, values);
+    }
 }

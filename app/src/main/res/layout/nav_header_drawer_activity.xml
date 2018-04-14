@@ -19,6 +19,7 @@
         android:layout_height="100dp"
         android:innerRadius="0dp"
         android:shape="ring"
+        android:layout_marginTop="16dp"
         android:thicknessRatio="1.9"
         app:cardCornerRadius="40dp">
 

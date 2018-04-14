@@ -33,7 +33,6 @@ public class SignInActivity extends AppCompatActivity {
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setIsSmartLockEnabled(false)
-                            .setLogo(R.mipmap.ic_launcher_round)
                             .setAvailableProviders(Arrays.asList(
                                     new AuthUI.IdpConfig.EmailBuilder().build(),
                                     new AuthUI.IdpConfig.GoogleBuilder().build()))
@@ -56,22 +55,15 @@ public class SignInActivity extends AppCompatActivity {
             } else {
                 // Sign in failed
                 if (response == null) {
-                    // User pressed back button
                     Log.d(TAG , "User pressed back button");
-                    //showSnackbar(R.string.sign_in_cancelled);
                     return;
                 }
                 if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
                     Log.d(TAG , "No network");
-                    //showSnackbar(R.string.no_internet_connection);
                     return;
                 }
-                //showSnackbar(R.string.unknown_error);
                 Log.e(TAG, "Sign-in error: ", response.getError());
             }
         }
     }
-
-
-
 }

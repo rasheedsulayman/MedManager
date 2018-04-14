@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
 import com.r4sh33d.medmanager.database.MedicationLoader;
@@ -17,6 +18,7 @@ public class MedBootReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            Log.d("BOOTMEDMANAGERRECEIEVER", "onBoot recieved");
             MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
             SQLiteDatabase db = medicationDBHelper.getReadableDatabase();
             ArrayList<Medication> activeMedications = MedicationLoader.getMedicationsList(db, MedicationLoader.ACTIVE_MEDICATION_SELECTION);
@@ -30,6 +32,7 @@ public class MedBootReceiver extends BroadcastReceiver{
                     Intent alarmIntent = new Intent(context, MedJobBroadcastReceiver.class);
                     intent.putExtra(Constants.KEY_MEDICATIO_DB_ROW_ID , medication.dbRowId);
                     Utils.scheduleAlarm(medication , context  , alarmIntent , scheduleTime);
+                    Log.d("BOOTMEDMANAGERRECEIEVER", "Med Rescheduled for " + medication.name);
                 }
             }
             db.close();

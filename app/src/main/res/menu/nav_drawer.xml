@@ -6,22 +6,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_active_med_list"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_radio_button_checked_black_24dp"
             android:title="Active Medications" />
-
         <item
             android:id="@+id/nav_medications_by_month"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_radio_button_checked_black_24dp"
             android:title="Select Medications by Month" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-        </menu>
-    </item>
 
 </menu>

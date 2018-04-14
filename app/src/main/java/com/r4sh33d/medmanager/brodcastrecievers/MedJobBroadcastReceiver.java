@@ -32,8 +32,6 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
          Log.d(TAG , "Broadcast reciever onRecieved called");
         long medicationRowId  = intent.getLongExtra(Constants.KEY_MEDICATIO_DB_ROW_ID, -1);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
         SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
 
@@ -71,7 +69,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         return new NotificationCompat.Builder(context, NOTIFICATION_CHANEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(medication.name + "Medication reminder")
+                .setContentTitle(medication.name + " Medication reminder ")
                 .setContentText("This is to remind you to take your medication : " + medication.name)
                 .setAutoCancel(true)
                 .setPriority(Notification.PRIORITY_HIGH)
@@ -83,7 +81,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
     @TargetApi(Build.VERSION_CODES.O)
     private void setUPNotificationChannel(NotificationManager notificationManager) {
         CharSequence name = "Med Manager Channel";
-        String description = "This Notification Channel remind you of your scheduled medications using the Med Manager APP";
+        String description = "This Notification Channel remind you of your scheduled medications using the Med Manager App";
         NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANEL_ID, name,
                 NotificationManager.IMPORTANCE_HIGH);
         channel.setDescription(description);

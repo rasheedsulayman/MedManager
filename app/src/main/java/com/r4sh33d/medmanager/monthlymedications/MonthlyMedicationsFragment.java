@@ -11,6 +11,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.r4sh33d.medmanager.BaseFragment;
 import com.r4sh33d.medmanager.R;
+import com.r4sh33d.medmanager.activities.MainActivity;
 import com.r4sh33d.medmanager.database.MedicationDBContract;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
 import com.r4sh33d.medmanager.datepickers.MonthOnlyPickerDialog;
@@ -45,12 +47,12 @@ public class MonthlyMedicationsFragment extends BaseFragment implements
     FloatingActionButton changeMonthFab;
     @BindView(R.id.recyclerview)
     RecyclerView monthlyRecyclerView;
-
     @BindView(R.id.month_label)
     TextView monthLabel;
     MedicationsListAdapter medicationsListAdapter;
     private String MONTHLY_INTERVAL_SELECTION = "";
     Calendar calendar;
+    private static final String TAG = MonthlyMedicationsFragment.class.getSimpleName();
 
     public MonthlyMedicationsFragment() {
         // Required empty public constructor
@@ -68,9 +70,12 @@ public class MonthlyMedicationsFragment extends BaseFragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setToolbarTitle("Monthly Medications");
+        ((MainActivity)getActivity()).setDrawerIconToHome();
         medicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>() , false);
         monthlyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         monthlyRecyclerView.setAdapter(medicationsListAdapter);
+        getLoaderManager().restartLoader(100, null,this);
         calendar = Calendar.getInstance();
         Utils.setCalenderDefault(calendar);
     }
@@ -81,8 +86,7 @@ public class MonthlyMedicationsFragment extends BaseFragment implements
         Calendar thisMonthCalender = Calendar.getInstance();
         calendar.set(Calendar.YEAR, thisMonthCalender.get(Calendar.YEAR));
         calendar.set(Calendar.MONTH, thisMonthCalender.get(Calendar.MONTH));
-        //monthLabel.setText(getFormattedTextForMonthLabel(calendar));
-        setToolbarTitle(getFormattedTextForMonthLabel(calendar));
+        monthLabel.setText(getFormattedTextForMonthLabel(calendar));
         MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
         getLoaderManager().initLoader(0, null, this);
     }
@@ -95,6 +99,8 @@ public class MonthlyMedicationsFragment extends BaseFragment implements
 
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Medication>> loader, ArrayList<Medication> data) {
+        Log.d(TAG , "Data size is " + data.size());
+        Log.d(TAG , ""+ data);
         medicationsListAdapter.updateData(data);
     }
 
@@ -105,15 +111,14 @@ public class MonthlyMedicationsFragment extends BaseFragment implements
     public void onDatePicked(int year, int month) {
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
-        //monthLabel.setText(getFormattedTextForMonthLabel(calendar));
-        setToolbarTitle(getFormattedTextForMonthLabel(calendar));
+        monthLabel.setText(getFormattedTextForMonthLabel(calendar));
         MONTHLY_INTERVAL_SELECTION = getMonthIntervalSelection(calendar);
         getLoaderManager().restartLoader(0, null, this);
     }
 
     String getFormattedTextForMonthLabel(Calendar calendar) {
         SimpleDateFormat month_date = new SimpleDateFormat("MMMM , yyyy", Locale.getDefault());
-        return "Medications for "  + month_date.format(calendar.getTime());
+        return "Medications intake for "  + month_date.format(calendar.getTime());
     }
 
     String getMonthIntervalSelection(Calendar calendar) {
