@@ -61,6 +61,7 @@ public class SearchableActivity extends AppCompatActivity implements
 
     @Override
     public boolean onQueryTextChange(String newText) {
+
         if (newText.equals(queryEntered)) {
             return true;
         }
@@ -69,6 +70,8 @@ public class SearchableActivity extends AppCompatActivity implements
             SEARCH_FILTER = MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME +  " LIKE '%" + queryEntered + "%'";
             Log.d(TAG,"Search filter now is : \n" + SEARCH_FILTER);
             getSupportLoaderManager().restartLoader(0, null, this);
+        }else {
+            medicationsListAdapter.clearData();
         }
         return true;
     }

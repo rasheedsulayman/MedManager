@@ -57,7 +57,6 @@ public class MedicationLoader {
     }
 
     public static Cursor getMedicationCursor(String selection, SQLiteDatabase db) {
-
         Cursor cursor = db.query(
                 MedicationDBContract.MedicationEntry.TABLE_NAME,   // The table to query
                 projection,             // The array of columns to return (pass null to get all)

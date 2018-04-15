@@ -13,6 +13,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,7 @@ public class UpdateProfileFragment extends BaseFragment implements UpdateProfile
     void updateProfile() {
         userEnteredDisplayName = String.format("%s %s", firstNameEditText.getText().toString(),
                 lastNameEditText.getText().toString());
-        if (isDisplaNameChanged(userEnteredDisplayName) && (profilePicPath == null)) {
+        if (!isDisplayNameChanged(userEnteredDisplayName) && (profilePicPath == null)) {
             showToast("Please make changes to update profile");
             return;
         }
@@ -107,7 +108,7 @@ public class UpdateProfileFragment extends BaseFragment implements UpdateProfile
         }
     }
 
-    boolean isDisplaNameChanged(String displayName) {
+    boolean isDisplayNameChanged(String displayName) {
         return !displayName.equals(user.getDisplayName());
     }
 

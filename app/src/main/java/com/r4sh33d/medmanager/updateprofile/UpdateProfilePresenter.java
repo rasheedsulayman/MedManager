@@ -124,7 +124,9 @@ public class UpdateProfilePresenter implements UpdateProfileContract.Presenter {
 
     @Override
     public void detachListeners() {
-        uploadImageTask.removeOnSuccessListener(fileUploadSuccessListener)
-                .removeOnFailureListener(fileUploadFailureListener);
+        if (uploadImageTask != null){
+            uploadImageTask.removeOnSuccessListener(fileUploadSuccessListener)
+                    .removeOnFailureListener(fileUploadFailureListener);
+        }
     }
 }

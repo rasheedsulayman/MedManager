@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-public abstract class BaseFragment  extends Fragment  implements  BaseContract.view{
+public abstract class BaseFragment  extends Fragment  implements  BaseContract.view {
 
     public void setToolbarTitle (String title){
         ActionBar ab = ((AppCompatActivity)getActivity()).getSupportActionBar();

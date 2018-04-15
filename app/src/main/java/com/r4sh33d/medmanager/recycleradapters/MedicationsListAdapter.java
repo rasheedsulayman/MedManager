@@ -62,6 +62,11 @@ public class MedicationsListAdapter extends RecyclerView.Adapter<MedicationsList
         notifyDataSetChanged();
     }
 
+    public void clearData() {
+        medicationArrayList.clear();
+        notifyDataSetChanged();
+    }
+
     class MedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.medication_name)
         TextView medicationName;

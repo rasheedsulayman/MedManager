@@ -1,4 +1,4 @@
-package com.r4sh33d.medmanager;
+package com.r4sh33d.medmanager.glidemodule;
 
 /**
  * Created by r4sh33d on 7/3/17.
