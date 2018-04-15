@@ -15,6 +15,7 @@ android:
   - sys-img-armeabi-v7a-android-22
 before_install:
  - chmod +x gradlew
+ - chmod +x gradle/wrapper/gradle-wrapper.jar
 script:
   - ./gradlew build jacocoTestReport assembleAndroidTest
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a

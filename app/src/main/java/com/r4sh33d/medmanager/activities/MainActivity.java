@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener , UpdateProfileFragment.ProfileUpdateListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -184,5 +184,11 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onProfileUpdated() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        setNavigationViewHeaderDetails(user);
     }
 }

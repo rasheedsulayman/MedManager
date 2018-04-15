@@ -17,5 +17,6 @@ public interface UpdateProfileContract {
     }
 
     interface View extends BaseContract.view {
+        void onProfileSuccesfullyUpdated();
     }
 }

@@ -1,13 +1,18 @@
 package com.r4sh33d.medmanager.updateprofile;
 
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UpdateProfileFragment extends BaseFragment implements  UpdateProfileContract.View{
+public class UpdateProfileFragment extends BaseFragment implements UpdateProfileContract.View {
     private static final String TAG = UpdateProfileFragment.class.getSimpleName();
     @BindView(R.id.first_name_edittext)
     TextInputEditText firstNameEditText;
@@ -44,9 +49,19 @@ public class UpdateProfileFragment extends BaseFragment implements  UpdateProfil
     public static final int PICK_IMAGE = 1;
     String profilePicPath;
     UpdateProfileContract.Presenter updateContractPresenter;
+    String userEnteredDisplayName;
+    ProfileUpdateListener profileUpdateListener;
 
     public UpdateProfileFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ProfileUpdateListener){
+            profileUpdateListener = (ProfileUpdateListener)context;
+        }
     }
 
     @Override
@@ -73,11 +88,27 @@ public class UpdateProfileFragment extends BaseFragment implements  UpdateProfil
     }
 
     void updateProfile() {
-        String displayName = String.format("%s %s", firstNameEditText.getText().toString(),
+        userEnteredDisplayName = String.format("%s %s", firstNameEditText.getText().toString(),
                 lastNameEditText.getText().toString());
-        if (!displayName.equals(user.getDisplayName()) || (profilePicPath != null)) {
-            updateContractPresenter.updateProfile(displayName , profilePicPath);
+        if (isDisplaNameChanged(userEnteredDisplayName) && (profilePicPath == null)) {
+            showToast("Please make changes to update profile");
+            return;
         }
+        if (profilePicPath != null) {
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                updateContractPresenter.updateProfile(userEnteredDisplayName, profilePicPath);
+            } else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            }
+        } else {
+            updateContractPresenter.updateProfile(userEnteredDisplayName, null);
+        }
+    }
+
+    boolean isDisplaNameChanged(String displayName) {
+        return !displayName.equals(user.getDisplayName());
     }
 
     @OnClick(R.id.user_profile_pic)
@@ -91,10 +122,24 @@ public class UpdateProfileFragment extends BaseFragment implements  UpdateProfil
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE) {
-            setProfilePic(data.getData());//update the choosen profile pic image as a preview
-            profilePicPath = Utils.getRealPathFromURI(data.getData(), getContext());
+            if (data != null) {
+                setProfilePic(data.getData());//update the choosen profile pic image as a preview
+                profilePicPath = Utils.getRealPathFromURI(data.getData(), getContext());
+            }
+
         }
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            updateContractPresenter.updateProfile(userEnteredDisplayName, profilePicPath);
+        }
+    }
+
 
     @OnClick(R.id.update_profile)
     void onClickUpdateProfilePic() {
@@ -113,5 +158,14 @@ public class UpdateProfileFragment extends BaseFragment implements  UpdateProfil
     public void onDestroyView() {
         updateContractPresenter.detachListeners();
         super.onDestroyView();
+    }
+
+    @Override
+    public void onProfileSuccesfullyUpdated() {
+        profileUpdateListener.onProfileUpdated();
+    }
+
+    public  interface  ProfileUpdateListener {
+        void onProfileUpdated();
     }
 }

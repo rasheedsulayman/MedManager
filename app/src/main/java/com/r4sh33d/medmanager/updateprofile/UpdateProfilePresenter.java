@@ -30,7 +30,7 @@ public class UpdateProfilePresenter implements UpdateProfileContract.Presenter {
 
     public UpdateProfilePresenter(UpdateProfileContract.View view) {
         this.view = view;
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
         storageInstance = FirebaseStorage.getInstance();
         profilePicref = storageInstance.getReference().child(uid).child("profilepic.jpg");
@@ -89,7 +89,6 @@ public class UpdateProfilePresenter implements UpdateProfileContract.Presenter {
         if (photoUri != null) {
             profileUpdatesBuilder.setPhotoUri(photoUri);
         }
-
         updateProfileDetailsTask = user.updateProfile(profileUpdatesBuilder.build())
                 .addOnCompleteListener(updateProfileCompleteListener)
                 .addOnFailureListener(updateProfileFailureListener);
@@ -102,6 +101,7 @@ public class UpdateProfilePresenter implements UpdateProfileContract.Presenter {
             //the might be killed before we return here
             if (view != null) {
                 if (task.isSuccessful()) {
+                    view.onProfileSuccesfullyUpdated();
                     view.showSuccessDialog("Profile successfully updated",
                             (dialog, which) -> {});
                 } else {
