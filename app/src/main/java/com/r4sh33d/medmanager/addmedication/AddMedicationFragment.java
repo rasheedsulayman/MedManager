@@ -11,11 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,7 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.r4sh33d.medmanager.BaseFragment;
+import com.r4sh33d.medmanager.base.BaseFragment;
 import com.r4sh33d.medmanager.activities.MainActivity;
 import com.r4sh33d.medmanager.brodcastrecievers.MedJobBroadcastReceiver;
 import com.r4sh33d.medmanager.models.Interval;
@@ -234,6 +232,7 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
         db.close();
     }
 
+    @Override
     public void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }

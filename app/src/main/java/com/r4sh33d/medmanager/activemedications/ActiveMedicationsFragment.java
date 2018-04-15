@@ -15,7 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.r4sh33d.medmanager.BaseFragment;
+import com.r4sh33d.medmanager.base.BaseFragment;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.activities.MainActivity;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;

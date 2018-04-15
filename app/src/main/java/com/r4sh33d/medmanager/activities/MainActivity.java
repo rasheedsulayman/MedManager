@@ -27,6 +27,7 @@ import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.activemedications.ActiveMedicationsFragment;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
 import com.r4sh33d.medmanager.models.Medication;
+import com.r4sh33d.medmanager.updateprofile.UpdateProfileFragment;
 import com.r4sh33d.medmanager.utility.Constants;
 
 import butterknife.BindView;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity
             //We could open this activity, just to edit Medication, from SearchActivity.
             Medication medication = openingIntent.getParcelableExtra(Constants.KEY_MEDICATION_BUNDLE);
             navigateToFragment(AddMedicationFragment.newInstance(medication));
-        }else {
+        } else {
             //coming from the launcher
             navigateToFragment(new ActiveMedicationsFragment());
         }
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         userEmail.setText(user.getEmail());
         GlideApp.with(this)
                 .load(user.getPhotoUrl())
+                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(userProfilePic);
     }
@@ -115,17 +117,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG , "Item button pressed");
+        Log.d(TAG, "Item button pressed");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            startActivity(new Intent(this , SearchableActivity.class));
+            startActivity(new Intent(this, SearchableActivity.class));
             return true;
-        }else if (id == android.R.id.home){
-            Log.d(TAG , "Android home clicked");
+        } else if (id == android.R.id.home) {
+            Log.d(TAG, "Android home clicked");
             getSupportFragmentManager().popBackStack();
             return true;
         }
@@ -168,6 +170,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_medications_by_month:
                 navigateToFragment(new MonthlyMedicationsFragment());
+                break;
+            case R.id.nav_update_profile:
+                navigateToFragment(new UpdateProfileFragment());
                 break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

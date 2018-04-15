@@ -24,27 +24,27 @@ import com.r4sh33d.medmanager.utility.Constants;
 import com.r4sh33d.medmanager.utility.Utils;
 
 public class MedJobBroadcastReceiver extends BroadcastReceiver {
-    private  static final String TAG = MedJobBroadcastReceiver.class.getSimpleName();
+    private static final String TAG = MedJobBroadcastReceiver.class.getSimpleName();
     private static final int NOTIFICATION_ID = 100;
     private static final String NOTIFICATION_CHANEL_ID = "MedManager channel ";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-         Log.d(TAG , "Broadcast reciever onRecieved called");
-        long medicationRowId  = intent.getLongExtra(Constants.KEY_MEDICATIO_DB_ROW_ID, -1);
+        Log.d(TAG, "MedJoB Broadcast reciever onRecieved called");
+        long medicationRowId = intent.getLongExtra(Constants.KEY_MEDICATIO_DB_ROW_ID, -1);
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
         SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
 
         if (medicationRowId != -1) {
-            Medication medication = MedicationLoader.getMedicationInfoWithId(medicationRowId , db);
+            Medication medication = MedicationLoader.getMedicationInfoWithId(medicationRowId, db);
             //send Notification here
-            Log.d(TAG , "Medication gotten from the DB " + medication);
-            sendNotification(medication , context);
+            Log.d(TAG, "Medication gotten from the DB " + medication);
+            sendNotification(medication, context);
             long newRingTime = System.currentTimeMillis() + medication.interval;
-            if ( newRingTime < medication.endTime){
+            if (newRingTime < medication.endTime) {
                 //if we are still in bound, schedule another alarm
-                Utils.scheduleAlarm(medication , context , intent , newRingTime);
-                MedicationLoader.updateNextRingTime(medicationRowId , newRingTime, db);
+                Utils.scheduleAlarm(medication, context, intent, newRingTime);
+                MedicationLoader.updateNextRingTime(medicationRowId, newRingTime, db);
             }
         }
     }
@@ -55,11 +55,11 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setUPNotificationChannel(notificationManager);
         }
-        notificationManager.notify(NOTIFICATION_ID, getNotification(medication , context));
+        notificationManager.notify(NOTIFICATION_ID, getNotification(medication, context));
         Log.d(TAG, "About to send notification");
     }
 
-    public Notification getNotification(Medication medication , Context context) {
+    public Notification getNotification(Medication medication, Context context) {
     /*    Intent intent = new Intent(this, NotificationDetailsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);

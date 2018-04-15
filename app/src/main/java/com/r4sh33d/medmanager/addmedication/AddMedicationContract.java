@@ -18,8 +18,6 @@ public interface AddMedicationContract {
         void updateMedication(Medication medication, SQLiteDatabase db);
     }
 
-
-
     interface View  {
         void onMedicationInsertedToDb(Medication medication);
         void onMedicationUpdated();
