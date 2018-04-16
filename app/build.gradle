@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco-android'
+
 
 android {
     compileSdkVersion 27
@@ -11,8 +13,13 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         release {
+            testCoverageEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -42,6 +49,12 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.google.firebase:firebase-storage:12.0.1'
+    implementation group: 'org.jacoco', name: 'org.jacoco.agent', version: '0.7.5.201505241946'
+    testCompile 'org.mockito:mockito-core:1.10.19'
 }
-
+configurations.all {
+    resolutionStrategy {
+        force 'com.android.support:support-annotations:23.1.1'
+    }
+}
 apply plugin: 'com.google.gms.google-services'
