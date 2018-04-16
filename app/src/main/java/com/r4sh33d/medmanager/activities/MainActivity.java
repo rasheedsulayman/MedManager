@@ -3,32 +3,33 @@ package com.r4sh33d.medmanager.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.r4sh33d.medmanager.GlideApp;
-import com.r4sh33d.medmanager.monthlymedications.MonthlyMedicationsFragment;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.activemedications.ActiveMedicationsFragment;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
 import com.r4sh33d.medmanager.models.Medication;
+import com.r4sh33d.medmanager.monthlymedications.MonthlyMedicationsFragment;
 import com.r4sh33d.medmanager.updateprofile.UpdateProfileFragment;
 import com.r4sh33d.medmanager.utility.Constants;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,10 +92,12 @@ public class MainActivity extends AppCompatActivity
         TextView userEmail = headerView.findViewById(R.id.user_email);
         userDisplayName.setText(user.getDisplayName());
         userEmail.setText(user.getEmail());
-        GlideApp.with(this)
+        Picasso.get()
                 .load(user.getPhotoUrl())
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .noFade()
+                //we want to see changes immediately when the propfile pic is changed
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
                 .into(userProfilePic);
     }
 

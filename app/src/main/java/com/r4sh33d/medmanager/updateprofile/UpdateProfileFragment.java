@@ -13,19 +13,19 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.r4sh33d.medmanager.base.BaseFragment;
-import com.r4sh33d.medmanager.GlideApp;
 import com.r4sh33d.medmanager.R;
+import com.r4sh33d.medmanager.base.BaseFragment;
 import com.r4sh33d.medmanager.utility.Utils;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -148,10 +148,11 @@ public class UpdateProfileFragment extends BaseFragment implements UpdateProfile
     }
 
     void setProfilePic(Uri url) {
-        GlideApp.with(this)
+        Picasso.get()
                 .load(url)
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .noFade()
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
                 .into(userProfilePic);
     }
 
