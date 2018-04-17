@@ -6,9 +6,9 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
@@ -26,22 +26,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Medication Name"
+                    android:text="@string/medication_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <EditText
                     android:id="@+id/medication_name_edit_text"
                     android:layout_width="match_parent"
-
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="Add medication name" />
-
+                    android:hint="@string/add_medication_name" />
             </LinearLayout>
 
 
         </android.support.v7.widget.CardView>
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,7 +55,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Medication description"
+                    android:text="@string/medication_description"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <EditText
@@ -66,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="Add medication description" />
+                    android:hint="@string/add_medication_description" />
 
             </LinearLayout>
 
@@ -87,16 +84,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Quantity"
+                    android:text="@string/quantity"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/medication_quantity_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="Add medication quantity" />
+                    android:hint="@string/add_medication_quantity"
+                    android:inputType="number" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -117,8 +114,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Interval"
+                    android:text="@string/interval"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
                 <Spinner
                     android:id="@+id/medication_interval_spinner"
                     android:layout_width="match_parent"
@@ -126,6 +124,7 @@
                     android:layout_marginTop="8dp"
                     android:saveEnabled="true"
                     android:spinnerMode="dropdown" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
@@ -151,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="Medication Schedule"
+                    android:text="@string/medication_schedule"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <android.support.v7.widget.CardView
@@ -170,16 +169,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Starting Date"
+                            android:text="@string/starting_date"
                             android:textColor="@color/almost_black"
-                            android:textSize="16dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/starting_date_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Touch here to set date " />
+                            android:text="@string/touch_here_to_set_date" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -201,16 +200,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Starting time"
+                            android:text="@string/starting_time"
                             android:textColor="@color/almost_black"
-                            android:textSize="16dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/starting_time_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Touch here to set date " />
+                            android:text="@string/touch_here_to_set_time" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -231,16 +230,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ending Date"
+                            android:text="@string/ending_date"
                             android:textColor="@color/almost_black"
-                            android:textSize="16dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/ending_date_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Touch here to set date " />
+                            android:text="@string/touch_here_to_set_date" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -253,10 +252,9 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
             android:padding="8dp"
-            android:text="Next" />
-
+            android:text="@string/next" />
     </LinearLayout>
-
 
 </ScrollView>

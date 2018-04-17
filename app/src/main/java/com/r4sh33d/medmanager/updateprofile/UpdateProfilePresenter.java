@@ -21,18 +21,16 @@ import java.io.File;
 
 public class UpdateProfilePresenter implements UpdateProfileContract.Presenter {
     private StorageReference profilePicref;
-    private FirebaseStorage storageInstance;
     FirebaseUser user;
     private UpdateProfileContract.View view;
-    UploadTask uploadImageTask;
-    Task updateProfileDetailsTask;
-    String userDisplayName;
+    private UploadTask uploadImageTask;
+    private String userDisplayName;
 
     public UpdateProfilePresenter(UpdateProfileContract.View view) {
         this.view = view;
         user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
-        storageInstance = FirebaseStorage.getInstance();
+        FirebaseStorage storageInstance = FirebaseStorage.getInstance();
         profilePicref = storageInstance.getReference().child(uid).child("profilepic.jpg");
     }
 
@@ -89,7 +87,7 @@ public class UpdateProfilePresenter implements UpdateProfileContract.Presenter {
         if (photoUri != null) {
             profileUpdatesBuilder.setPhotoUri(photoUri);
         }
-        updateProfileDetailsTask = user.updateProfile(profileUpdatesBuilder.build())
+        Task updateProfileDetailsTask = user.updateProfile(profileUpdatesBuilder.build())
                 .addOnCompleteListener(updateProfileCompleteListener)
                 .addOnFailureListener(updateProfileFailureListener);
     }

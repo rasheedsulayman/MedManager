@@ -10,4 +10,25 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="medication_name">Medication Name</string>
+    <string name="add_medication_name">Add medication name</string>
+    <string name="medication_description">Medication description</string>
+    <string name="add_medication_description">Add medication description</string>
+    <string name="quantity">Quantity</string>
+    <string name="add_medication_quantity">Add medication quantity</string>
+    <string name="interval">Interval</string>
+    <string name="medication_schedule">Medication Schedule</string>
+    <string name="starting_date">Starting Date</string>
+    <string name="touch_here_to_set_date">Touch here to set date</string>
+    <string name="ending_date">Ending Date</string>
+    <string name="touch_here_to_set_time">Touch here to set time</string>
+    <string name="starting_time">Starting time</string>
+    <string name="next">Next</string>
+    <string name="edit_medication">Edit Medication</string>
+    <string name="add_new_medication">Add new Medication</string>
+    <string name="please_enter_medication_name">Please enter medication name</string>
+    <string name="please_enter_med_quantity">Please enter quantity to proceed</string>
+    <string name="please_enter_start_date">Please enter start date to proceed</string>
+    <string name="please_enter_start_time">Please enter start time to proceed</string>
+    <string name="please_enter_end_date">Please enter end date to proceed</string>
 </resources>

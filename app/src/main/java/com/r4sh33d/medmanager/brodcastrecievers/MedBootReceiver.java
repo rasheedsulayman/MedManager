@@ -30,7 +30,7 @@ public class MedBootReceiver extends BroadcastReceiver{
                 }
                 if (scheduleTime < medication.endTime && scheduleTime > currentTime){
                     Intent alarmIntent = new Intent(context, MedJobBroadcastReceiver.class);
-                    intent.putExtra(Constants.KEY_MEDICATIO_DB_ROW_ID , medication.dbRowId);
+                    intent.putExtra(Constants.KEY_MEDICATION_DB_ROW_ID , medication.dbRowId);
                     Utils.scheduleAlarm(medication , context  , alarmIntent , scheduleTime);
                     Log.d("BOOTMEDMANAGERRECEIEVER", "Med Rescheduled for " + medication.name);
                 }

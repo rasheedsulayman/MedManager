@@ -31,7 +31,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "MedJoB Broadcast reciever onRecieved called");
-        long medicationRowId = intent.getLongExtra(Constants.KEY_MEDICATIO_DB_ROW_ID, -1);
+        long medicationRowId = intent.getLongExtra(Constants.KEY_MEDICATION_DB_ROW_ID, -1);
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
         SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
 

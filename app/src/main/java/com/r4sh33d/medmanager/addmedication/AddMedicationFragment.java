@@ -103,14 +103,14 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
         prepareSpinner();
         if (getArguments() != null && getArguments().getParcelable(MED_OBJECT_ARG) != null) {
             //We want to edit medication
-            setToolbarTitle("Edit Medication");
+            setToolbarTitle(getString(R.string.edit_medication));
             Medication medication = getArguments().getParcelable(MED_OBJECT_ARG);
             medicationToEdit = medication;
             //prepopulate the fields with the details of the Medication to edit
             prepopulateFields(medication);
         } else {
             // We want to add new medication
-            setToolbarTitle("Add new Medication");
+            setToolbarTitle(getString(R.string.add_new_medication));
         }
     }
 
@@ -165,7 +165,7 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
         Log.d(TAG, "OnMedication inserted " + medication);
         AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), MedJobBroadcastReceiver.class);
-        intent.putExtra(Constants.KEY_MEDICATIO_DB_ROW_ID, medication.dbRowId);
+        intent.putExtra(Constants.KEY_MEDICATION_DB_ROW_ID, medication.dbRowId);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(),
                 (int) medication.dbRowId, //Realistically, our db will never reach Integer.MAX_VALUE
                 intent, 0);
@@ -176,7 +176,7 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
 
     @Override
     public void onMedicationUpdated() {
-        Toast.makeText(getContext(), "Medication updated", Toast.LENGTH_SHORT).show();
+        showToast("Medication updated");
         moveToNextStep();
     }
 
@@ -189,23 +189,23 @@ public class AddMedicationFragment extends BaseFragment implements AddMedication
     @OnClick(R.id.button)
     void onClickSave() {
         if (!Utils.validateEditTexts(medicationNameEditText)) {
-            showToast("Please enter medication name ");
+            showToast(getString(R.string.please_enter_medication_name));
             return;
         }
         if (!Utils.validateEditTexts(medicationQuantityEditText)) {
-            showToast("Please enter quantity to proceed ");
+            showToast(getString(R.string.please_enter_med_quantity));
             return;
         }
         if (TextUtils.isEmpty(startDate)) {
-            showToast("Please enter start date to proceed");
+            showToast(getString(R.string.please_enter_start_date));
             return;
         }
         if (TextUtils.isEmpty(startTime)) {
-            showToast("Please enter start time to proceed");
+            showToast(getString(R.string.please_enter_start_time));
             return;
         }
         if (TextUtils.isEmpty(endDate)) {
-            showToast("Please enter end date to proceed");
+            showToast(getString(R.string.please_enter_end_date));
             return;
         }
         perFormAddOrEditAction();
