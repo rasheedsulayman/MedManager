@@ -31,7 +31,7 @@ public class MedInstrumentationTests {
 
     @Before
     public void setUp() throws Exception {
-        context = InstrumentationRegistry.getContext();
+        context = InstrumentationRegistry.getTargetContext();
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
         db = medicationDBHelper.getWritableDatabase();
     }
@@ -41,9 +41,9 @@ public class MedInstrumentationTests {
     public void testAddMedication() {
         Medication expectedMedication = new Medication("Paracetamol",
                 "For Headache",
-                "50", 1524008520000L, 1524008520000L, 52200000, 2, 1524014256962L);
+                "50", 1524008520000L, 1524008520000L, 52200000, 1, 1524014256962L);
         MedicationDao.addMedication(expectedMedication, db);
-        Medication actualMedication = MedicationDao.getMedicationInfoWithId(2, db);
+        Medication actualMedication = MedicationDao.getMedicationInfoWithId(1, db);
         assertEquals(expectedMedication.dbRowId, actualMedication.dbRowId);
     }
 
@@ -51,7 +51,7 @@ public class MedInstrumentationTests {
     public  void testGetMedicationList() {
         Medication expectedMedication = new Medication("Paracetamol",
                 "For Headache",
-                "50", 1524008520000L, 1524008520000L, 52200000, 2, 1524014256962L);
+                "50", 1524008520000L, 1524008520000L, 52200000, 1, 1524014256962L);
         MedicationDao.addMedication(expectedMedication, db);
         ArrayList<Medication> medications = MedicationDao.getMedicationsList(db, null);
         assertEquals(true, medications.size() > 0);
@@ -62,7 +62,7 @@ public class MedInstrumentationTests {
     public  void testUpdateMedicationNextRingTime() {
         Medication expectedMedication = new Medication("Paracetamol",
                 "For Headache",
-                "50", 1524008520000L, 1524008520000L, 52200000, 2, 1524014256962L);
+                "50", 1524008520000L, 1524008520000L, 52200000, 1, 1524014256962L);
         long expectedNewNextRingTime = 15240142509004L;
         MedicationDao.updateNextRingTime(expectedMedication.dbRowId, expectedNewNextRingTime, db);
         Medication actualMedication = MedicationDao.getMedicationInfoWithId(expectedMedication.dbRowId, db);
@@ -73,12 +73,12 @@ public class MedInstrumentationTests {
     public void testUpdateMedication() {
         Medication medicationToTest = new Medication("Paracetamol",
                 "For Headache",
-                "50", 1524008520000L, 1524008520000L, 52200000, 2, 1524014256962L);
+                "50", 1524008520000L, 1524008520000L, 52200000, 1, 1524014256962L);
         MedicationDao.addMedication(medicationToTest, db);
         String expectedNameString = "Updated Parectamol";
         medicationToTest.name = expectedNameString;
         MedicationDao.updateMedication(medicationToTest , db);
         Medication actualMedication = MedicationDao.getMedicationInfoWithId(medicationToTest.dbRowId, db);
-        assertEquals(expectedNameString, actualMedication.dbRowId);
+        assertEquals(expectedNameString, actualMedication.name);
     }
 }
