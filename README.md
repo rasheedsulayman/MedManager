@@ -3,8 +3,10 @@
 
 # MedManager 
 
-This App enable Users to track their medication intake. It allows them to
+This App enable Users to track their medication intake. It allows them to:
  - Add new Medications
  - Update existing Medications
  - Group Medications by Month
- - Search for Medications<br/>The App notify users when it is time to take their scheduled medications.
+ - Search for Medications<br/>
+
+The App notify users when it is time to take their scheduled medications.
