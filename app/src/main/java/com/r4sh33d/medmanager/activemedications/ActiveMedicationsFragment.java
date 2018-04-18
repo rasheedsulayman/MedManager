@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.r4sh33d.medmanager.base.BaseFragment;
 import com.r4sh33d.medmanager.R;
@@ -39,6 +40,8 @@ public class ActiveMedicationsFragment extends BaseFragment implements ActiveMed
     private static final String TAG = ActiveMedicationsFragment.class.getSimpleName();
     @BindView(R.id.recyclerview)
     RecyclerView medsListRecyclerView;
+    @BindView(R.id.empty_med_textView)
+    TextView emptyMedTextView;
     MedicationsListAdapter activeMedicationsListAdapter;
 
     public ActiveMedicationsFragment() {
@@ -92,6 +95,13 @@ public class ActiveMedicationsFragment extends BaseFragment implements ActiveMed
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Medication>> loader, ArrayList<Medication> data) {
         Log.d(TAG, data+ "");
+        if (!(data.size() > 0 )){
+            emptyMedTextView.setVisibility(View.VISIBLE);
+            medsListRecyclerView.setVisibility(View.GONE);
+        }else {
+            emptyMedTextView.setVisibility(View.GONE);
+            medsListRecyclerView.setVisibility(View.VISIBLE);
+        }
         activeMedicationsListAdapter.updateData(data);
     }
 

@@ -24,7 +24,6 @@ public class DatePickerFragment  extends DialogFragment implements DatePickerDia
         return fragment;
     }
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

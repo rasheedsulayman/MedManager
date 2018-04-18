@@ -27,6 +27,17 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <TextView
+        tools:visibility ="visible"
+        android:visibility="gone"
+        android:id="@+id/empty_med_textView"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:text="You have No Medication intake this Month, Click the button below to change Months"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

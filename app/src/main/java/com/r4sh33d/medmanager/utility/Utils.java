@@ -37,7 +37,7 @@ public class Utils {
 
     public static void setCalenderDefault(Calendar calendar) {
         calendar.setTimeInMillis(0);
-        calendar.set(Calendar.HOUR_OF_DAY, 0); //UTC offset
+        calendar.set(Calendar.HOUR_OF_DAY, 0); //UTC offset correction
     }
 
     public static int getSpinnerIndexFromMedicationsList(long intervalTime, ArrayList<Interval> intervals) {
