@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.r4sh33d.medmanager.R;
+import com.r4sh33d.medmanager.activities.SignInActivity;
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
 import com.r4sh33d.medmanager.database.MedicationLoader;
 import com.r4sh33d.medmanager.models.Medication;
@@ -30,11 +32,9 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "MedJoB Broadcast reciever onRecieved called");
         long medicationRowId = intent.getLongExtra(Constants.KEY_MEDICATION_DB_ROW_ID, -1);
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
         SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
-
         if (medicationRowId != -1) {
             Medication medication = MedicationLoader.getMedicationInfoWithId(medicationRowId, db);
             //send Notification here
@@ -56,16 +56,13 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
             setUPNotificationChannel(notificationManager);
         }
         notificationManager.notify(NOTIFICATION_ID, getNotification(medication, context));
-        Log.d(TAG, "About to send notification");
     }
 
     public Notification getNotification(Medication medication, Context context) {
-    /*    Intent intent = new Intent(this, NotificationDetailsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra(NOTIFICATION_OBJECT_ARGS, fcmNotification);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);*/
+        //Try to launch the App when user clicks on the Notification
+        Intent intent = new Intent(context, SignInActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         return new NotificationCompat.Builder(context, NOTIFICATION_CHANEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -74,7 +71,10 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setSound(soundUri)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(("This is to remind you to take your medication : "  +  medication.name)))
                 .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setContentIntent(pendingIntent)
                 .build();
     }
 

@@ -10,6 +10,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.widget.EditText;
 
+import com.r4sh33d.medmanager.brodcastrecievers.MedJobBroadcastReceiver;
 import com.r4sh33d.medmanager.models.Interval;
 import com.r4sh33d.medmanager.models.Medication;
 
@@ -48,10 +49,11 @@ public class Utils {
         return 0;
     }
 
-    public static String getRealPathFromURI(Uri contentURI , Context context) {
+    public static String getRealPathFromURI(Uri contentURI, Context context) {
         String result;
-        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
+        Cursor cursor = context.getContentResolver().query(contentURI, null, null,
+                null, null);
+        if (cursor == null) {
             result = contentURI.getPath();
         } else {
             cursor.moveToFirst();

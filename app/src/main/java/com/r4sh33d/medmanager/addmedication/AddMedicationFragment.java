@@ -34,7 +34,7 @@ import com.r4sh33d.medmanager.datepickers.DatePickerFragment;
 import com.r4sh33d.medmanager.datepickers.TimePickerFragment;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;
-import com.r4sh33d.medmanager.utility.LocalData;
+import com.r4sh33d.medmanager.database.LocalData;
 import com.r4sh33d.medmanager.utility.Utils;
 
 import java.text.SimpleDateFormat;

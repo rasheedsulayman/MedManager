@@ -61,10 +61,6 @@ public class MainActivity extends AppCompatActivity
         if (user != null) {
             // Name, email address, and profile photo Url
             setNavigationViewHeaderDetails(user);
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-            String uid = user.getUid();
         }
         Intent openingIntent = getIntent();
         if (openingIntent.getAction() != null &&
@@ -76,12 +72,7 @@ public class MainActivity extends AppCompatActivity
             //coming from the launcher
             navigateToFragment(new ActiveMedicationsFragment());
         }
-        drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        drawerToggle.setToolbarNavigationClickListener(v -> onBackPressed());
     }
 
     void setNavigationViewHeaderDetails(FirebaseUser user) {
@@ -95,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         Picasso.get()
                 .load(user.getPhotoUrl())
                 .noFade()
-                //we want to see changes immediately when the propfile pic is changed
+                //we want to see changes immediately when the profile pic is changed
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .networkPolicy(NetworkPolicy.NO_CACHE)
                 .into(userProfilePic);

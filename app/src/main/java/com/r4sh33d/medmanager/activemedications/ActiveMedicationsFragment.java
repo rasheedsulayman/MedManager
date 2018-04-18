@@ -90,7 +90,7 @@ public class ActiveMedicationsFragment extends BaseFragment implements ActiveMed
 
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Medication>> loader, ArrayList<Medication> data) {
-        Log.d(TAG, data+"");
+        Log.d(TAG, data+ "");
         activeMedicationsListAdapter.updateData(data);
     }
 
