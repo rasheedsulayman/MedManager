@@ -61,7 +61,6 @@ public class SearchableActivity extends AppCompatActivity implements
 
     @Override
     public boolean onQueryTextChange(String newText) {
-
         if (newText.equals(queryEntered)) {
             return true;
         }

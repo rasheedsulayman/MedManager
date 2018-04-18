@@ -119,7 +119,6 @@ public class UpdateProfilePresenter implements UpdateProfileContract.Presenter {
         }
     };
 
-
     @Override
     public void detachListeners() {
         if (uploadImageTask != null){

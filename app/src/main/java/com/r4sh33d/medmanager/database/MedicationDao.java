@@ -1,7 +1,6 @@
 package com.r4sh33d.medmanager.database;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
@@ -10,7 +9,7 @@ import com.r4sh33d.medmanager.models.Medication;
 
 import java.util.ArrayList;
 
-public class MedicationLoader {
+public class MedicationDao {
 
     public static String[] projection = {
             BaseColumns._ID,
@@ -47,7 +46,7 @@ public class MedicationLoader {
     }
 
     public static int updateMedication( Medication medication, SQLiteDatabase db) {
-        ContentValues contentValues = MedicationLoader.getContentValuesForMedication(medication);
+        ContentValues contentValues = MedicationDao.getContentValuesForMedication(medication);
         String selection = MedicationDBContract.MedicationEntry._ID + " = " + String.valueOf(medication.dbRowId);
         return db.update(
                 MedicationDBContract.MedicationEntry.TABLE_NAME,
@@ -56,7 +55,7 @@ public class MedicationLoader {
                 null);
     }
 
-    public static Cursor getMedicationCursor(String selection, SQLiteDatabase db) {
+    private static Cursor getMedicationCursor(String selection, SQLiteDatabase db) {
         Cursor cursor = db.query(
                 MedicationDBContract.MedicationEntry.TABLE_NAME,   // The table to query
                 projection,             // The array of columns to return (pass null to get all)
@@ -69,7 +68,7 @@ public class MedicationLoader {
         return cursor;
     }
 
-    public static ContentValues getContentValuesForMedication(Medication medication) {
+    private static ContentValues getContentValuesForMedication(Medication medication) {
         ContentValues values = new ContentValues();
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NAME, medication.name);
         values.put(MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_DESCRIPTION, medication.description);
@@ -83,7 +82,7 @@ public class MedicationLoader {
         return values;
     }
 
-    public static ArrayList<Medication> getMedicationsListFromCursor(Cursor cursor) {
+    private static ArrayList<Medication> getMedicationsListFromCursor(Cursor cursor) {
         ArrayList<Medication> medicationArrayList = new ArrayList<>();
         if (cursor != null) {
             int idColumn = cursor.getColumnIndex(MedicationDBContract.MedicationEntry._ID);
@@ -112,7 +111,7 @@ public class MedicationLoader {
     }
 
     public static long addMedication(Medication medication, SQLiteDatabase db) {
-        ContentValues values = MedicationLoader.getContentValuesForMedication(medication);
+        ContentValues values = MedicationDao.getContentValuesForMedication(medication);
         return db.insert(MedicationDBContract.MedicationEntry.TABLE_NAME, null, values);
     }
 }

@@ -23,7 +23,6 @@ public class MedicationDBHelper extends SQLiteOpenHelper {
                     MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_NEXT_RING_TIME + " INTEGER," +
                     MedicationDBContract.MedicationEntry.COLUMN_MEDICATION_END_TIME + " INTEGER)";
 
-
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + MedicationDBContract.MedicationEntry.TABLE_NAME;
 

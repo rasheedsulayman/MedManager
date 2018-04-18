@@ -19,7 +19,7 @@ import com.r4sh33d.medmanager.base.BaseFragment;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.activities.MainActivity;
 import com.r4sh33d.medmanager.addmedication.AddMedicationFragment;
-import com.r4sh33d.medmanager.database.MedicationLoader;
+import com.r4sh33d.medmanager.database.MedicationDao;
 import com.r4sh33d.medmanager.database.MedicationsListLoader;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.recycleradapters.MedicationsListAdapter;
@@ -64,7 +64,8 @@ public class ActiveMedicationsFragment extends BaseFragment implements ActiveMed
         super.onViewCreated(view, savedInstanceState);
         setToolbarTitle("Active Medications");
         ((MainActivity) getActivity()).setDrawerIconToHome();
-        activeMedicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>(), false);
+        activeMedicationsListAdapter = new MedicationsListAdapter(new ArrayList<Medication>(),
+                false);
         medsListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         medsListRecyclerView.setAdapter(activeMedicationsListAdapter);
         getLoaderManager().restartLoader(100, null, this);
@@ -85,7 +86,7 @@ public class ActiveMedicationsFragment extends BaseFragment implements ActiveMed
     @NonNull
     @Override
     public Loader<ArrayList<Medication>> onCreateLoader(int id, Bundle args) {
-        return new MedicationsListLoader(getContext(), MedicationLoader.ACTIVE_MEDICATION_SELECTION, null);
+        return new MedicationsListLoader(getContext(), MedicationDao.ACTIVE_MEDICATION_SELECTION, null);
     }
 
     @Override

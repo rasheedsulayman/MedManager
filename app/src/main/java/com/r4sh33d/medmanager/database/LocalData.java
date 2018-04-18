@@ -13,12 +13,11 @@ public class LocalData {
 
     static {
         intervalArrayList = new ArrayList<>();
-         Log.d(TAG , "The interval is " + (0.5/60.0f));
-        intervalArrayList.add(new Interval("Every 30 seconds", (0.5/60.0f)));
-        intervalArrayList.add(new Interval("Every 5 minutes" , (5/60.0f)));
-        intervalArrayList.add(new Interval("Every 10 minutes" , (10/60.0f)));
-        for (double i = 0.5 ; i <= 24 ; i += 0.5 ){
-            intervalArrayList.add(new Interval("Every "  + i + " hours ", i ));
+        //Log.d(TAG, "The interval is " + (0.5 / 60.0f));
+        intervalArrayList.add(new Interval("Every 5 minutes", (5 / 60.0f)));
+        intervalArrayList.add(new Interval("Every 10 minutes", (10 / 60.0f)));
+        for (double i = 0.5; i <= 24; i += 0.5) {
+            intervalArrayList.add(new Interval("Every " + i + " hours ", i));
         }
     }
 }

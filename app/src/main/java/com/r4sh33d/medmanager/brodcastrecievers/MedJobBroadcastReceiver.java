@@ -1,7 +1,6 @@
 package com.r4sh33d.medmanager.brodcastrecievers;
 
 import android.annotation.TargetApi;
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,7 +19,7 @@ import android.util.Log;
 import com.r4sh33d.medmanager.R;
 import com.r4sh33d.medmanager.activities.SignInActivity;
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
-import com.r4sh33d.medmanager.database.MedicationLoader;
+import com.r4sh33d.medmanager.database.MedicationDao;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;
 import com.r4sh33d.medmanager.utility.Utils;
@@ -36,7 +35,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
         MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
         SQLiteDatabase db = medicationDBHelper.getWritableDatabase();
         if (medicationRowId != -1) {
-            Medication medication = MedicationLoader.getMedicationInfoWithId(medicationRowId, db);
+            Medication medication = MedicationDao.getMedicationInfoWithId(medicationRowId, db);
             //send Notification here
             Log.d(TAG, "Medication gotten from the DB " + medication);
             sendNotification(medication, context);
@@ -44,7 +43,7 @@ public class MedJobBroadcastReceiver extends BroadcastReceiver {
             if (newRingTime < medication.endTime) {
                 //if we are still in bound, schedule another alarm
                 Utils.scheduleAlarm(medication, context, intent, newRingTime);
-                MedicationLoader.updateNextRingTime(medicationRowId, newRingTime, db);
+                MedicationDao.updateNextRingTime(medicationRowId, newRingTime, db);
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.r4sh33d.medmanager.brodcastrecievers;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.r4sh33d.medmanager.database.MedicationDBHelper;
-import com.r4sh33d.medmanager.database.MedicationLoader;
+import com.r4sh33d.medmanager.database.MedicationDao;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Constants;
 import com.r4sh33d.medmanager.utility.Utils;
@@ -26,8 +25,8 @@ public class MedBootReceiver extends BroadcastReceiver{
             Log.d(TAG, "onBootRecieved");
             MedicationDBHelper medicationDBHelper = new MedicationDBHelper(context);
             SQLiteDatabase db = medicationDBHelper.getReadableDatabase();
-            ArrayList<Medication> activeMedications = MedicationLoader.getMedicationsList(db,
-                    MedicationLoader.ACTIVE_MEDICATION_SELECTION);
+            ArrayList<Medication> activeMedications = MedicationDao.getMedicationsList(db,
+                    MedicationDao.ACTIVE_MEDICATION_SELECTION);
             for (Medication medication : activeMedications){
                 long scheduleTime  = medication.nextRingTime;
                 long currentTime = System.currentTimeMillis();

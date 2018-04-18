@@ -4,7 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.r4sh33d.medmanager.database.MedicationLoader;
+import com.r4sh33d.medmanager.database.MedicationDao;
 import com.r4sh33d.medmanager.models.Medication;
 import com.r4sh33d.medmanager.utility.Utils;
 
@@ -27,7 +27,7 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
     @Override
     public void addMedicationToDb(Medication medication, SQLiteDatabase db) {
         // Gets the data repository in write mode
-        medication.dbRowId = MedicationLoader.addMedication(medication, db);
+        medication.dbRowId = MedicationDao.addMedication(medication, db);
         view.onMedicationInsertedToDb(medication);
     }
 
@@ -42,7 +42,7 @@ public class AddMedicationPresenter implements AddMedicationContract.Presenter {
 
     @Override
     public void updateMedication(Medication medication, SQLiteDatabase db) {
-        MedicationLoader.updateMedication(medication, db);
+        MedicationDao.updateMedication(medication, db);
         view.onMedicationUpdated();
     }
 }
